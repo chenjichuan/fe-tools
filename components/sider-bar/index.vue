@@ -144,7 +144,6 @@
         }
       },
       onMenuclick(item) {
-        console.log(item)
       }
     }
   }
