@@ -1,0 +1,79 @@
+#default-layout {
+  background: #f5f7f9;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 100%;
+  .logo-con {
+    margin: 10px;
+    height: 66px;
+    margin-left: 8px;
+    overflow: hidden;
+    img {
+      border-radius: 6px;
+      height: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .layout-header-bar {
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  }
+  .layout-logo-left {
+    width: 90%;
+    height: 30px;
+    background: #5b6270;
+    border-radius: 3px;
+    margin: 15px auto;
+  }
+  .menu-icon {
+    transition: all .3s;
+    cursor: pointer;
+  }
+  .rotate-icon {
+    transform: rotate(-90deg);
+  }
+  .menu-item span {
+    display: inline-block;
+    overflow: hidden;
+    width: 69px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+    transition: width .2s ease .2s;
+  }
+  .menu-item i {
+    font-size: 16px;
+  }
+  .collapsed-menu {
+    span {
+      width: 0px;
+      display: none;
+      transition: width .2s ease;
+    }
+    .ivu-menu-submenu-title-icon {
+      display: none;
+    }
+  }
+  .menu-icon {
+    transform: translateX(0px) scale(1);
+    //transition: font-size .2s ease, transform  10s ease;
+  }
+  .collapsed-menu {
+    .menu-icon {
+      animation: scaler .2s ease forwards;
+    }
+  }
+}
+
+@keyframes scaler {
+  from {
+    transform: translateX(0px) scale(1);
+
+  }
+  to {
+    transform: translateX(2px) scale(1.3);
+    font-size: 22px;
+  }
+}

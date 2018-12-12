@@ -1,0 +1,5 @@
+export const getWeekly = (data) => $fetch.get('/api/getWeekly', data)
+export const delWeekly = (data) => $fetch.post('/api/delWeekly', data)
+export const editWeekly = (data) => $fetch.post('/api/editWeekly', data)
+export const addWeekly = (data) => $fetch.post('/api/addWeekly', data)
+export const getProject = (data) => $fetch.get('/api/getProject', data)

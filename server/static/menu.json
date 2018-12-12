@@ -1,0 +1,54 @@
+[
+  {
+    "path": "/home",
+    "name": "home",
+    "valueText": "",
+    "icon": "md-home",
+    "hide": true
+  },
+  {
+    "name": "pro",
+    "valueText": "项目",
+    "icon": "ios-navigate",
+    "children": [
+      {
+        "path": "/project",
+        "name": "project",
+        "valueText": "项目列表",
+        "icon": "logo-designernews"
+      },
+      {
+        "path": "/weekly",
+        "name": "weekly",
+        "valueText": "周报",
+        "icon": "ios-bookmarks"
+      }
+    ]
+  },
+  {
+    "path": "/option2",
+    "name": "option2",
+    "valueText": "菜单2",
+    "icon": "ios-keypad"
+  },
+  {
+    "path": "/option3",
+    "name": "option3",
+    "valueText": "菜单3",
+    "icon": "ios-analytics"
+  },
+  {
+    "group": "100",
+    "name": "person",
+    "valueText": "个人",
+    "icon": "md-contact",
+    "children": [
+      {
+        "path": "/setting",
+        "name": "setting",
+        "valueText": "个人设置",
+        "icon": "ios-settings"
+      }
+    ]
+  }
+]

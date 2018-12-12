@@ -1,0 +1,72 @@
+.flex {
+  display: flex;
+  justify-content: flex-start;
+  >span {
+    flex-shrink: 0;
+  }
+}
+.title-card {
+  padding: 24px 32px;
+  background: #fff;
+  border-radius: 2px;
+  line-height: 1.5;
+  text-align: center;
+  .top-p {
+    color: rgba(0,0,0,.45);
+    display: inline-block;
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 4px;
+  }
+  .bottom-p {
+    color: rgba(0,0,0,.85);
+    font-size: 24px;
+    line-height: 32px;
+    margin: 0;
+  }
+}
+.lists {
+  margin-top: 20px;
+  border-radius: 2px;
+  background-color: #fff;
+  padding: 0 32px;
+  padding-bottom: 36px;
+  h2 {
+    line-height: 32px;
+    padding: 24px 0;
+  }
+  .list-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .left-icon {
+    margin-left: 16px;
+    h3 {
+      color: rgba(0,0,0,.65);
+      margin-bottom: 4px;
+      font-size: 14px;
+      line-height: 22px;
+    }
+    p {
+      color: rgba(0,0,0,.45);
+      font-size: 14px;
+      line-height: 22px;
+    }
+  }
+  .info {
+    line-height: 20px;
+    color: rgba(0,0,0,.45);
+    >div.text {
+      display: inline-block;
+      margin-right: 20px;
+    }
+  }
+  .ivu-page {
+    text-align: right;
+    margin-top: 28px;
+  }
+  .operation {
+    display: flex;
+    justify-content: space-around;
+  }
+}

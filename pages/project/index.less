@@ -1,0 +1,54 @@
+.mod-project {
+  .header {
+    background-color: #fff;
+    @include flex();
+    @include flex-align-justify();
+    padding: 10px 20px;
+    height: auto;
+    line-height: initial;
+    margin: -24px -24px 0 -24px;
+    h1 {
+      font-size: 20px;
+      margin: 16px 0;
+      color: rgba(0, 0, 0, 0.85);
+    }
+    p {
+      font-size: 14px;
+    }
+
+    .r-img {
+      width: 176px;
+      margin-right: 20px;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+  .list {
+    margin-top: 24px;
+    .ivu-row {
+      margin-left: -12px;
+      margin-right: -12px;
+      > div {
+        padding: 0 12px;
+        margin-bottom: 16px;
+      }
+      .description {
+        min-height: 50px;
+        color: rgba(0, 0, 0, .45);
+      }
+    }
+    .card-footer {
+      background: #f7f9fa;
+      margin: 0 -16px;
+      .buttons {
+        text-align: center;
+        margin: 12px 0;
+        &:not(:last-child) {
+          border-right: 1px solid #e8e8e8;
+        }
+      }
+    }
+  }
+}

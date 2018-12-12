@@ -1,0 +1,21 @@
+@import '~iview/src/styles/index.less';
+
+// Here are the variables to cover, such as:
+//@primary-color: #8c0776;
+@menu-dark              : #fff;
+@menu-dark-active-bg          : #2d8cf0;
+@menu-dark-bg : #001529;
+.ivu-menu-dark {
+  background-color: @menu-dark-bg;
+  &.ivu-menu-vertical {
+    .ivu-menu-item-active:not(.ivu-menu-submenu) {
+      color: #fff;
+    }
+  }
+}
+.ivu-layout-sider-trigger {
+  background-color: @menu-dark-bg;
+}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened {
+  background-color: transparent;
+}
