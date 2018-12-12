@@ -2,6 +2,9 @@
 
 > My riveting Nuxt.js project
 
+# view in  [example](http://47.99.215.225)
+
+
 ## Build Setup
 
 ``` bash
