@@ -7,10 +7,10 @@ const menu = (app) => {
   app.get('/api/getMenuList', function (req, res) {
     const {authUser: {group}} = req.session
     fs.readFile('server/static/menu.json', 'utf8', function (err, data) {
-
+      console.log(group)
       const objData = JSON.parse(data);
       let list = objData
-      if (+group === 100) { //游客权限
+      if (+group === 100 || !group) { //游客权限
         list = objData.filter(item => {
           if(item.name === 'home') return true
           else return  item.group === '100'

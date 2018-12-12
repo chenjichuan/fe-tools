@@ -2,7 +2,7 @@
   {
     "path": "/home",
     "name": "home",
-    "valueText": "",
+    "valueText": "home",
     "icon": "md-home",
     "hide": true
   },
@@ -26,16 +26,16 @@
     ]
   },
   {
-    "path": "/option2",
-    "name": "option2",
-    "valueText": "菜单2",
-    "icon": "ios-keypad"
+    "path": "/qr-code",
+    "name": "qr-code",
+    "valueText": "二维码生成",
+    "icon": "ios-qr-scanner"
   },
   {
-    "path": "/option3",
-    "name": "option3",
-    "valueText": "菜单3",
-    "icon": "ios-analytics"
+    "path": "/poster",
+    "name": "poster",
+    "valueText": "postman",
+    "icon": "ios-send"
   },
   {
     "group": "100",

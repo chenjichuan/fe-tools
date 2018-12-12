@@ -32,7 +32,8 @@ export const getBreadCrumbList = (menuList, homeRoute, currentRoute) => {
         }, {
           icon: active.icon || '',
           name: active.name,
-          valueText: item.valueText + '-' + active.valueText,
+          valueText: active.valueText,
+          title: active.valueText + '-' + active.valueText,
         }])
       }
     } else {
@@ -41,6 +42,7 @@ export const getBreadCrumbList = (menuList, homeRoute, currentRoute) => {
           icon: item.icon || '',
           name: item.name,
           valueText: item.valueText || '',
+          title: item.valueText
         })
       }
     }

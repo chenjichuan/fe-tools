@@ -1,8 +1,8 @@
 <template>
   <div class="layout main" id="default-layout">
     <Layout style="height: 100%;display: flex;">
-      <Sider ref="side1" collapsible :collapsed-width="84"
-             width="200px"
+      <Sider ref="side1" collapsible collapsed-width="100"
+             width="230px"
              style="height: 100%;"
              :style="{'overflow': isCollapsed ? '': 'hidden'}"
              class="ivu-menu-dark"
@@ -76,8 +76,12 @@
       },
       title() {
         const breadCrumbList = this.app.breadCrumbList
-        const current = breadCrumbList[breadCrumbList.length - 1] || {}
-        return current.valueText || 'fe-tools'
+        const current = breadCrumbList[breadCrumbList.length - 1];
+        if(current) {
+          return current.title || current.valueText
+        } else {
+          return 'fe-tools'
+        }
       }
     },
     watch: {

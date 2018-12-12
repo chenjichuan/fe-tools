@@ -1,6 +1,6 @@
 <template>
   <div>
-    22222
+    qr-code
   </div>
 </template>
 
