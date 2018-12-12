@@ -14,13 +14,21 @@ const userAction = require('./controller/userAction')
 const apprAction = require('./controller/appAction')
 
 const app = express()
-const host = process.env.HOST || '127.0.0.1'
-const port = process.env.PORT || 3000
-app.set('port', port)
+const host = process.env.HOST || '127.0.0.1';
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
+
+let port = '';
+if (config.dev) {
+  port = process.env.PORT || 3000
+} else {
+  port = 80;
+}
+
+app.set('port', port)
+
 
 /****************
  * global data
