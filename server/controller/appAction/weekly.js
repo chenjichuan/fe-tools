@@ -16,7 +16,8 @@ const weekly = (app, weeklyInstance, memberSql, projectSql) => {
   app.get('/api/getWeekly', async function (req, res) {
     // 未过期执行
     sessionCheck(req).then(async () => {
-      const { authUser: { group, userId } } = req.session
+      const { userId } = qs.parse(req.query);
+      const { authUser: { group } } = req.session
       const reault = await weeklyInstance.find({ group, userId })
       const data = []
       reault.forEach(item => {

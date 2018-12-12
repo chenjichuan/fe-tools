@@ -27,7 +27,12 @@ function weekly (sequelize) {
   };
   this.find = async function ({ userId, group }) {
     //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
-    const swicher_and = {userId, group};
+    let swicher_and = {userId, group};
+    if(userId) {
+      swicher_and = {userId, group};
+    } else {
+      swicher_and = {group};
+    }
     const query_or = [
       swicher_and
     ]

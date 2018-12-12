@@ -18,7 +18,17 @@
         </Row>
       </Content>
       <Content class="lists">
-        <h2>任务列表</h2>
+        <div class="top-header">
+          <h2>任务列表</h2>
+          <ButtonGroup>
+            <Button
+              :type="!isAll ? 'default' : 'primary'"
+              @click.native="changeList(authUser.userId)">我的任务</Button>
+            <Button
+              :type="isAll ? 'default' : 'primary'"
+              @click.native="changeList()">全部任务</Button>
+          </ButtonGroup>
+        </div>
         <upload-btn
           style="height: 32px"
           @click="clickHandler('add')">
@@ -81,6 +91,7 @@
   import UploadBtn from '@/components/upload-btn';
   import img from './images/1.png';
   import moment from 'moment'
+  import { mapState } from 'vuex';
 
   import  { getProject, getWeekly, delWeekly, editWeekly, addWeekly } from './api';
 
@@ -153,15 +164,33 @@
         switch: '', //编辑or删除
         formValue: {},
         formData: [],
+        pageParams: {
+          userId: ''
+        }
+      }
+    },
+    computed: {
+      ...mapState(['authUser']),
+      isAll() {
+        return Boolean(this.pageParams['userId'])
+      }
+    },
+    watch: {
+      isAll() {
+        this.getData()
       }
     },
     mounted() {
       this.formData = formData.filter(item => +item.group !== this.$store.state.authUser.group)
+      this.pageParams['userId'] = this.authUser.userId;
       this.getData()
     },
     methods: {
+      changeList(userId) {
+        this.pageParams['userId'] = userId;
+      },
       getData() {
-        getWeekly().then(res => {
+        getWeekly(this.pageParams).then(res => {
           this.list = res.data
         })
       },

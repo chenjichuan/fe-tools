@@ -5,6 +5,11 @@
     flex-shrink: 0;
   }
 }
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .title-card {
   padding: 24px 32px;
   background: #fff;
