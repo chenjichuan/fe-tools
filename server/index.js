@@ -14,7 +14,7 @@ const userAction = require('./controller/userAction')
 const apprAction = require('./controller/appAction')
 
 const app = express()
-const host = process.env.HOST || '127.0.0.1';
+const host = process.env.HOST || '0.0.0.0';
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
