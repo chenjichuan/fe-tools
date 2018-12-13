@@ -55,12 +55,6 @@
     "path": "/board",
     "name": "board",
     "valueText": "留言板",
-    "icon": "compose"
-  },
-  {
-    "path": "/board",
-    "name": "board",
-    "valueText": "留言板",
-    "icon": "md-contact"
+    "icon": "md-bonfire"
   }
 ]

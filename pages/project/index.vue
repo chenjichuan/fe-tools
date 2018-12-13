@@ -74,7 +74,7 @@
 <script>
   import UploadBtn from '@/components/upload-btn';
   import DataControl from '@/components/data-control';
-  import  { getGroup } from '@/api';
+//  import  { getGroup } from '@/api';
   import { mapState } from 'vuex';
   import { getProject, addProject, delProject, editProject } from './api';
 
@@ -85,16 +85,7 @@
       return {
         showModel: false,
         list: [],
-        formData: [{
-          label: '组 team',
-          key: 'group',
-          type: 'select',
-          require: true,
-          children: [],
-          render: () => {
-            return getGroup()
-          }
-        }, {
+        formData: [ {
           label: '项目名称',
           key: 'name',
           require: true,

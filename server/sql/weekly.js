@@ -37,9 +37,11 @@ function weekly (sequelize) {
       swicher_and
     ]
     var target = await WEEKLY.findAll({
+      // group: 'project_id', // 去重
       where: {
         $or: query_or
-      }
+      },
+      order: 'updatedAt DESC',
     });
     return target
   }

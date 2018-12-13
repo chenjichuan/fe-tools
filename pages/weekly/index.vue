@@ -5,15 +5,15 @@
         <Row>
           <Col span="8">
             <span class="top-p">我的待办</span>
-            <p class="bottom-p">没做</p>
+            <p class="bottom-p">X 个</p>
           </Col>
           <Col span="8">
             <span class="top-p">总任务数</span>
-            <p class="bottom-p">{{ list.length }}个任务</p>
+            <p class="bottom-p">{{ allMession }}个任务</p>
           </Col>
           <Col span="8">
             <span class="top-p">本周完成任务</span>
-            <p class="bottom-p">没做</p>
+            <p class="bottom-p">{{ myMission }}个任务</p>
           </Col>
         </Row>
       </Content>
@@ -22,11 +22,11 @@
           <h2>任务列表</h2>
           <ButtonGroup>
             <Button
-              :type="!isAll ? 'default' : 'primary'"
-              @click.native="changeList(authUser.userId)">我的任务</Button>
-            <Button
-              :type="isAll ? 'default' : 'primary'"
+              :type="isAll ? 'primary' : 'default'"
               @click.native="changeList()">全部任务</Button>
+            <Button
+              :type="!isAll ? 'primary' : 'default'"
+              @click.native="changeList(authUser.userId)">我的任务</Button>
           </ButtonGroup>
         </div>
         <upload-btn
@@ -74,7 +74,7 @@
             </Row>
           </li>
         </ul>
-        <Page :total="100"/>
+        <!--<Page :total="100"/>-->
       </Content>
     </Layout>
     <data-control
@@ -158,6 +158,8 @@
     data() {
       return {
         img,
+        allMession: 0,
+        myMission: 0,
         list: [],
         showModel: false,
         title: '任务编辑',
@@ -166,32 +168,31 @@
         formData: [],
         pageParams: {
           userId: ''
-        }
+        },
+        isAll: true
       }
     },
     computed: {
       ...mapState(['authUser']),
-      isAll() {
-        return Boolean(this.pageParams['userId'])
-      }
-    },
-    watch: {
-      isAll() {
-        this.getData()
-      }
     },
     mounted() {
       this.formData = formData.filter(item => +item.group !== this.$store.state.authUser.group)
-      this.pageParams['userId'] = this.authUser.userId;
+//      this.pageParams['userId'] = this.authUser.userId;
       this.getData()
     },
     methods: {
       changeList(userId) {
         this.pageParams['userId'] = userId;
+        userId ? this.isAll = false : this.isAll = true
+        this.getData();
       },
       getData() {
         getWeekly(this.pageParams).then(res => {
-          this.list = res.data
+          this.list = res.data;
+          this.myMission = 0;
+          if(this.isAll) {
+            this.allMession = this.list.length
+          }
         })
       },
       parseData(item) {
@@ -201,9 +202,16 @@
             var a = moment(item.date_range[0]).unix();
             var b = moment(item.date_range[1]).unix();
             var now = moment().unix();
-            var mini = (now - a) / (b - a);
-            var percent = mini.toFixed(2) * 100;
-            item.percent = percent > 0 ? percent : 0;
+            if(now > a && now < b) {
+              var mini = (now - a) / (b - a);
+              var percent = mini.toFixed(2) * 100;
+              item.percent = percent > 0 ? Math.floor(percent): 0;
+            } else if (now >= b) {
+              this.myMission++;
+              item.percent = 100;
+            } else  {
+              item.percent = 0;
+            }
           }
         }
       },

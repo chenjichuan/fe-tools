@@ -19,12 +19,18 @@ const weekly = (app, weeklyInstance, memberSql, projectSql) => {
       const { userId } = qs.parse(req.query);
       const { authUser: { group } } = req.session
       const reault = await weeklyInstance.find({ group, userId })
-      const data = []
+      const obj = {}
       reault.forEach(item => {
-        if (item.group == group) {
-          data.push(item)
+        if(!obj[item.project_id]) {
+          obj[item.project_id] = new Array(item);
+        } else {
+          obj[item.project_id].unshift(item)
         }
       })
+      let data = []
+      for(var key in obj) {
+        data = data.concat(obj[key])
+      }
       res.json({code: 0, data})
     }, () => {
       res.json({code: -2, message: '登录过期'})

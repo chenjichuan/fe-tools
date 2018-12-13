@@ -27,7 +27,8 @@ const project = (app, projectInstance) => {
   app.post('/api/addProject', async function (req, res) {
     // 未过期执行
     sessionCheck(req).then(async () => {
-      const { name, group, description } = req.body
+      const { name, description } = req.body
+      const { authUser: { group } } = req.session
       const data = await projectInstance.create( { name, group, description })
       res.json({code: 0, data})
     }, () => {

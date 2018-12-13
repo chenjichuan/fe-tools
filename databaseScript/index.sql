@@ -21,19 +21,49 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES (12, '63804785', 1, '陈某某', 'chenjichuan', '0', NULL, 1, '2018-12-12 14:13:50', '2018-12-12 14:14:06');
 
 
-CREATE TABLE `project` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
-  `group` int(2) DEFAULT '100',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : web用户
+ Source Server Type    : MySQL
+ Source Server Version : 80013
+ Source Host           : localhost:3306
+ Source Schema         : fetools
+
+ Target Server Type    : MySQL
+ Target Server Version : 80013
+ File Encoding         : 65001
+
+ Date: 13/12/2018 22:46:21
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for project
+-- ----------------------------
+DROP TABLE IF EXISTS `project`;
+CREATE TABLE `project`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` char(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
+  `group` int(2) DEFAULT 100,
+  `updatedAt` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  `createdAt` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Records of project
 -- ----------------------------
-INSERT INTO `project` VALUES (1, '车速拍', '', 1);
-INSERT INTO `project` VALUES (2, '车速达', '', 1);
-INSERT INTO `project` VALUES (3, '速车物流', '', 1);
+INSERT INTO `project` VALUES (4, '车速达', '', 1, '2018-12-13 14:45:38.000000', '2018-12-13 14:38:52.000000');
+INSERT INTO `project` VALUES (5, '供应商管理后台', '', 1, '2018-12-13 14:43:36.000000', '2018-12-13 14:43:36.000000');
+INSERT INTO `project` VALUES (6, '速车物流', '', 1, '2018-12-13 14:43:57.000000', '2018-12-13 14:43:57.000000');
+INSERT INTO `project` VALUES (7, 'bc后台', '', 1, '2018-12-13 14:45:33.000000', '2018-12-13 14:45:33.000000');
+INSERT INTO `project` VALUES (8, '车速拍', '', 1, '2018-12-13 14:45:50.000000', '2018-12-13 14:45:50.000000');
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 CREATE TABLE `group` (

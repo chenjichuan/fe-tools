@@ -7,7 +7,7 @@ function ProjectSql (sequelize) {
     description: Sequelize.STRING
   }, {
     freezeTableName: true,
-    timestamps: false, // //去除createAt updateAt
+    timestamps: true
   })
   this.create = async function({name, group, description}) {
     var project = await Project.create({
@@ -27,7 +27,8 @@ function ProjectSql (sequelize) {
     var target = await Project.findAll({
       where: {
         $or: query
-      }
+      },
+      order: 'updatedAt DESC'
     });
     return target
   }
