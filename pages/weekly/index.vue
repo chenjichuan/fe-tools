@@ -5,7 +5,7 @@
         <Row>
           <Col span="8">
             <span class="top-p">我的待办</span>
-            <p class="bottom-p">X 个</p>
+            <p class="bottom-p">{{ misdMission }} 个任务</p>
           </Col>
           <Col span="8">
             <span class="top-p">总任务数</span>
@@ -13,7 +13,7 @@
           </Col>
           <Col span="8">
             <span class="top-p">本周完成任务</span>
-            <p class="bottom-p">{{ myMission }}个任务</p>
+            <p class="bottom-p">{{ doneMission }}个任务</p>
           </Col>
         </Row>
       </Content>
@@ -60,16 +60,18 @@
                 </div>
                 <Progress :percent="item.percent || 0" :stroke-width="5" status="active"/>
               </Col>
-              <Col span="3" class="operation">
-                <Button type="text" style="color: #1890ff;" @click="clickHandler('edit', item)">编辑</Button>
-                <Poptip
-                  transfer
-                  style="text-align: left;"
-                  confirm
-                  title="确认删除?"
-                  @on-ok="delHandler(item)">
-                  <Button type="text" style="color: #1890ff;">删除</Button>
-                </Poptip>
+              <Col span="3" class="operation" >
+                <template v-if="item.userId === authUser.userId">
+                  <Button type="text" style="color: #1890ff;" @click="clickHandler('edit', item)">编辑</Button>
+                  <Poptip
+                    transfer
+                    style="text-align: left;"
+                    confirm
+                    title="确认删除?"
+                    @on-ok="delHandler(item)">
+                    <Button type="text" style="color: #1890ff;">删除</Button>
+                  </Poptip>
+                </template>
               </Col>
             </Row>
           </li>
@@ -159,7 +161,8 @@
       return {
         img,
         allMession: 0,
-        myMission: 0,
+        doneMission: 0,
+        misdMission: 0,
         list: [],
         showModel: false,
         title: '任务编辑',
@@ -167,31 +170,35 @@
         formValue: {},
         formData: [],
         pageParams: {
-          userId: ''
+          userId: undefined
         },
-        isAll: true
       }
     },
     computed: {
       ...mapState(['authUser']),
+      isAll() {
+        return !Boolean(this.pageParams['userId'])
+      }
     },
     mounted() {
       this.formData = formData.filter(item => +item.group !== this.$store.state.authUser.group)
-//      this.pageParams['userId'] = this.authUser.userId;
       this.getData()
     },
     methods: {
       changeList(userId) {
         this.pageParams['userId'] = userId;
-        userId ? this.isAll = false : this.isAll = true
         this.getData();
       },
       getData() {
         getWeekly(this.pageParams).then(res => {
           this.list = res.data;
-          this.myMission = 0;
           if(this.isAll) {
             this.allMession = this.list.length
+          } else {
+            this.doneMission = 0;
+            this.$nextTick(() => {
+              this.misdMission = this.list.length - this.doneMission
+            })
           }
         })
       },
@@ -207,7 +214,8 @@
               var percent = mini.toFixed(2) * 100;
               item.percent = percent > 0 ? Math.floor(percent): 0;
             } else if (now >= b) {
-              this.myMission++;
+              if(!this.isAll)
+                this.doneMission++;
               item.percent = 100;
             } else  {
               item.percent = 0;
