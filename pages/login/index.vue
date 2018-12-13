@@ -3,10 +3,9 @@
 </style>
 
 <template>
-  <!--<div class="login" :class="{'img-done': !loading}">-->
-  <div class="login">
+  <div class="login" :class="{'img-done': !loading}">
     <Loading v-if="loading" />
-    <canvas id="c" width="2560" height="404" />
+    <!--<canvas id="c" width="2560" height="404" />-->
     <transition name="fade">
       <div v-if="!loading" class="login-con">
         <Card
@@ -26,8 +25,8 @@
 <script>
 import Loading from '@/components/Loading'
 import LoginForm from '@/components/login-form'
-// import LoginBg from '@/assets/images/login-bg.jpg';
-import bgGo from './bg'
+import LoginBg from '@/assets/images/login-bg.jpg';
+// import bgGo from './bg'
 import { mapActions } from 'vuex'
 export default {
   layout: 'blank',
@@ -40,14 +39,16 @@ export default {
     }
   },
   mounted() {
-    // const bg = new Image()
-    // bg.onload = () => {
-    //   this.loading = false;
-    // }
-    setTimeout(() => {
+    const bg = new Image()
+    bg.onload = () => {
       this.loading = false;
-      bgGo(window)
-    }, 2000);
+    }
+    setTimeout(() => {
+      // this.loading = false;
+      // bgGo(window)
+      bg.src = LoginBg
+
+    }, 1000);
 
   },
   methods: {
