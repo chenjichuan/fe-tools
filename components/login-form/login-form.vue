@@ -39,7 +39,6 @@
 </template>
 <script>
   export default {
-    name: 'LoginForm',
     props: {
       userNameRules: {
         type: Array,
@@ -61,8 +60,8 @@
     data() {
       return {
         form: {
-          username: 'demo',
-          password: 'demo'
+          username: '',
+          password: ''
         }
       }
     },
@@ -71,6 +70,15 @@
         return {
           username: this.userNameRules,
           password: this.passwordRules
+        }
+      }
+    },
+    created() {
+      const dev = !(process.env.NODE_ENV === 'production');
+      if(dev) {
+        this.form = {
+          username: 'demo',
+          password: 'demo'
         }
       }
     },
