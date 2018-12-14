@@ -158,7 +158,8 @@
         switchKey: 'add',
         activeItem: '',
         qrModal: false,
-        app_url: ''
+        app_url: '',
+        modalTitle: ''
       }
     },
     // fetch 并不会设置组件内的data,主要修改vuex用

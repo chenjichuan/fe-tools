@@ -61,9 +61,11 @@
               </div>
               </Col>
               <Col span="11" class="info">
-              <div class="text">
-                <p>Owner</p>
-                <p>{{ item.owner || '缺省' }}</p>
+              <div class="text" >
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'transparent', fontWeight: '600'}">Owner</p>
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'transparent', fontWeight: '600'}">
+                  {{ item.owner || '缺省' }}
+                </p>
               </div>
               {{ parseData(item) }}
               <div class="text">
