@@ -40,27 +40,6 @@ function UserSql(sequelize) {
     });
     return target
   }
-  this.findOrCreate = function ({username, password}) {
-    //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
-    const swicher = {username, password};
-    const query = [swicher];
-    const p = new Promise((resolve, reject) => {
-      User.findOrCreate({
-        where: {
-          $or: query
-        }
-      }).spread((user, not_exist) => {
-        console.log(user, not_exist)
-        // if (not_exist === true) { // 不存在
-        //   reject();
-        // } else { // 已经存在
-        //   resolve(user);
-        // }
-      });
-    });
-    return p;
-  }
-
 
   this.edit = async ({userId}, data) => {
     var resault = await User.update(data, {
