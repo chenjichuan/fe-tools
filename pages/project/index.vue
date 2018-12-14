@@ -40,13 +40,13 @@
                   :value="item.app_test_url"
                   size="32"
                   level="H"
-                  @click.native="qrCodeClick(item.app_test_url)"
+                  @click.native="qrCodeClick(item.app_test_url, '测试包')"
                   v-if="item.app_test_url"/>
                 <qrcode-vue
                   :value="item.app_pro_url"
                   size="32"
                   level="H"
-                  @click.native="qrCodeClick(item.app_pro_url)"
+                  @click.native="qrCodeClick(item.app_pro_url, '正式包')"
                   v-if="item.app_pro_url"/>
               </div>
             </div>
@@ -95,10 +95,13 @@
       class-name="vertical-center-modal"
       class="qrModal"
       :closable="false">
+      <p slot="header" style="text-align:center">
+        {{ modalTitle || '' }}
+      </p>
       <qrcode-vue
         :value="app_url"
         size="400"
-        level="H"/>
+        level="H" />
       <div slot="footer"/>
     </Modal>
   </div>
@@ -181,7 +184,8 @@
           desc: params[2],
         });
       },
-      qrCodeClick(url) {
+      qrCodeClick(url, modalTitle) {
+        this.modalTitle = modalTitle;
         this.app_url = url;
         this.qrModal = true;
       },
