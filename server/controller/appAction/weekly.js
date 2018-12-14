@@ -16,20 +16,22 @@ const weekly = (app, weeklyInstance, memberSql, projectSql) => {
   app.get('/api/getWeekly', async function (req, res) {
     // 未过期执行
     sessionCheck(req).then(async () => {
-      const { userId } = qs.parse(req.query);
-      const { authUser: { group, username, nickname } } = req.session
-      const reault = await weeklyInstance.find({ group, userId })
+      // const { userId } = qs.parse(req.query);
+      const { authUser: { group, username, nickname, userId } } = req.session
+      const reault = await weeklyInstance.find({ group })
       const obj = {}
       reault.forEach(item => {
-        if(nickname) {
-          if(item.owner !== nickname) {
-            item.owner = nickname;
-            weeklyInstance.edit({id: item.id}, { owner: nickname})
-          }
-        } else {
-          if(item.owner !== username) {
-            item.owner = username;
-            weeklyInstance.edit({id: item.id}, { owner: username})
+        if(userId === item.userId) {
+          if(nickname) {
+            if(item.owner !== nickname) {
+              item.owner = nickname;
+              weeklyInstance.edit({id: item.id}, { owner: nickname})
+            }
+          } else {
+            if(item.owner !== username) {
+              item.owner = username;
+              weeklyInstance.edit({id: item.id}, { owner: username})
+            }
           }
         }
 
