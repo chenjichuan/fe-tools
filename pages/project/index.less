@@ -30,13 +30,24 @@
     .ivu-row {
       margin-left: -12px;
       margin-right: -12px;
+      display: flex;
+      flex-wrap: wrap;
       > div {
         padding: 0 12px;
         margin-bottom: 16px;
       }
       .description {
-        min-height: 50px;
+        min-height: 40px;
+        line-height: 20px;
         color: rgba(0, 0, 0, .45);
+      }
+    }
+    .content {
+      a, span {
+        display: inline-block;
+        line-height: 30px;
+        margin-bottom: 10px;
+        margin-top: 8px;
       }
     }
     .card-footer {

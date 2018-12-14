@@ -3,7 +3,7 @@
     v-model="modal"
     @on-cancel="handleReset"
     :title="title">
-    <Form ref="formValidate" :model="formParams" :rules="ruleValidate" :label-width="80">
+    <Form ref="formValidate" :model="formParams" :rules="ruleValidate" :label-width="100">
       <FormItem :label="item.label" :prop="item.key" v-for="(item, index) in form" :key="index">
         <Input v-model="formParams[item.key]"
                :key="item.key"

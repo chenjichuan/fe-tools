@@ -5,7 +5,7 @@
         <Row>
           <Col span="8">
             <span class="top-p">我的待办</span>
-            <p class="bottom-p">{{ misdMission }} 个任务</p>
+            <p class="bottom-p">{{ misdMission }}个任务</p>
           </Col>
           <Col span="8">
             <span class="top-p">总任务数</span>
@@ -36,7 +36,7 @@
         </upload-btn>
         <ul class="list-content">
           <!--key值作用-->
-          <li v-for="(item) in list" :key="item.project_id" class="list-item">
+          <li v-for="(item) in list" :key="item.id" class="list-item">
             <Row type="flex" justify="space-between" align="middle">
               <Col span="12">
                 <div class="flex">

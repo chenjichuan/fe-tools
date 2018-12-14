@@ -21,6 +21,7 @@
     "iview": "^3.1.5",
     "moment": "^2.22.2",
     "nuxt": "^2.3.4",
+    "qrcode.vue": "^1.6.1",
     "vue-ls": "^3.2.0",
     "whatwg-fetch": "^3.0.0"
   },

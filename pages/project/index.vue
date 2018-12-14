@@ -17,13 +17,12 @@
           :md="{ span: 12 }"
           :lg="{ span: 8 }">
           <upload-btn
-            style="height: 188px"
+            style="height: 100%"
             @click="clickHandler">
             新增项目
           </upload-btn>
         </i-col>
         <i-col
-          style="height: 188px"
           :xs="{ span: 24 }"
           :sm="{ span: 24 }"
           :md="{ span: 12 }"
@@ -31,11 +30,33 @@
           :key="index"
           v-for="(item, index) in list">
           <Card :bordered="false">
-            <p slot="title" class="card-title">
-              <Avatar icon="ios-person" src="https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png"/>
-              <span style="margin-left: 10px">{{ item.name }}</span>
-            </p>
-            <p class="description">{{ item.description || '很懒，暂无描述' }}</p>
+            <div slot="title" class="card-title">
+              <div>
+                <Avatar icon="ios-person" src="https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png"/>
+                <span style="margin-left: 10px">{{ item.name }}</span>
+              </div>
+              <div class="qr-code">
+                <qrcode-vue
+                  :value="item.app_test_url"
+                  size="32"
+                  level="H"
+                  @click.native="qrCodeClick(item.app_test_url)"
+                  v-if="item.app_test_url"/>
+                <qrcode-vue
+                  :value="item.app_pro_url"
+                  size="32"
+                  level="H"
+                  @click.native="qrCodeClick(item.app_pro_url)"
+                  v-if="item.app_pro_url"/>
+              </div>
+            </div>
+            <div class="content">
+              <p class="description">{{ item.description || '很懒，暂无描述' }}</p>
+              <a :href="item.test_url" target="_blank" v-if="item.test_url">测试地址</a>&nbsp;&nbsp;&nbsp;
+              <a :href="item.pro_url" target="_blank" v-if="item.pro_url">线上地址</a>
+              <a :href="item.git_url" target="_blank" v-if="item.git_url" style="float: right">git地址</a>
+            </div>
+
             <footer class="card-footer">
               <Row>
                 <i-col :xs="{ span: 12 }" class="buttons">
@@ -68,37 +89,73 @@
       :form-value="formValue"
       @submit="add"
     />
+    <Modal
+      v-model="qrModal"
+      width="440"
+      class-name="vertical-center-modal"
+      class="qrModal"
+      :closable="false">
+      <qrcode-vue
+        :value="app_url"
+        size="400"
+        level="H"/>
+      <div slot="footer" />
+    </Modal>
   </div>
 </template>
 
 <script>
+  import QrcodeVue from 'qrcode.vue';
   import UploadBtn from '@/components/upload-btn';
   import DataControl from '@/components/data-control';
-//  import  { getGroup } from '@/api';
-  import { mapState } from 'vuex';
-  import { getProject, addProject, delProject, editProject } from './api';
+  import {mapState} from 'vuex';
+  import {getProject, addProject, delProject, editProject} from './api';
 
+  const formData = [{
+    label: '项目名称',
+    key: 'name',
+    require: true,
+    type: 'text',
+  }, {
+    label: '测试地址',
+    key: 'test_url',
+    type: 'text',
+  }, {
+    label: '正式地址',
+    key: 'pro_url',
+    type: 'text',
+  },  {
+    label: 'App测试包地址',
+    key: 'app_test_url',
+    type: 'text',
+  }, {
+    label: 'App正式包地址',
+    key: 'app_pro_url',
+    type: 'text',
+  }, {
+    label: 'git地址',
+    key: 'git_url',
+    type: 'text',
+  }, {
+    label: '项目描述',
+    key: 'description',
+    type: 'textarea',
+  }]
   export default {
-    components: {UploadBtn, DataControl},
-    async asyncData({store}) {},
+    components: {QrcodeVue, UploadBtn, DataControl},
+    async asyncData({store}) {
+    },
     data() {
       return {
         showModel: false,
         list: [],
-        formData: [ {
-          label: '项目名称',
-          key: 'name',
-          require: true,
-          type: 'text',
-        }, {
-          label: '项目描述',
-          key: 'description',
-          type: 'textarea',
-        }],
+        formData,
         title: '新建项目',
         formValue: {},
         switchKey: 'add',
-        activeItem: ''
+        activeItem: '',
+        qrModal: false,
+        app_url: ''
       }
     },
     // fetch 并不会设置组件内的data,主要修改vuex用
@@ -118,11 +175,15 @@
       })
     },
     methods: {
-      showMsg(params)  {
+      showMsg(params) {
         this.$Notice[params[0]]({
           title: params[1],
           desc: params[2],
         });
+      },
+      qrCodeClick(url) {
+        this.app_url = url;
+       this.qrModal = true;
       },
       clickHandler() {
         this.switchKey = 'add'
@@ -171,10 +232,36 @@
 </script>
 
 <style lang="scss">
+  .vertical-center-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ivu-modal{
+      top: 0;
+    }
+  }
+  .qrModal {
+    .ivu-modal-body {
+      text-align: center;
+    }
+    .ivu-modal-footer {
+      display: none;
+    }
+  }
   .mod-project {
     .card-title {
-      line-height: 30px;
       height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .qr-code {
+        >div {
+          cursor: pointer;
+          display: inline-block;
+          margin-left: 20px;
+        }
+        /*margin-left: 30%;*/
+      }
     }
     .ivu-card {
       border: 1px solid #e8e8e8;

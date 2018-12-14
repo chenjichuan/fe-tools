@@ -4,16 +4,19 @@ function ProjectSql (sequelize) {
   const Project = sequelize.define('project', {
     name: Sequelize.STRING,
     group: Sequelize.INTEGER,
+    test_url: Sequelize.INTEGER,
+    pro_url: Sequelize.INTEGER,
+    app_test_url: Sequelize.INTEGER,
+    app_pro_url: Sequelize.INTEGER,
+    git_url: Sequelize.INTEGER,
     description: Sequelize.STRING
   }, {
     freezeTableName: true,
     timestamps: true
   })
-  this.create = async function({name, group, description}) {
+  this.create = async function(data) {
     var project = await Project.create({
-      name,
-      group,
-      description
+      ...data
     });
     return project;
   };

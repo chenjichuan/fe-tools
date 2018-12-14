@@ -27,9 +27,9 @@ const project = (app, projectInstance) => {
   app.post('/api/addProject', async function (req, res) {
     // 未过期执行
     sessionCheck(req).then(async () => {
-      const { name, description } = req.body
+      // const { name, description, test_url, pro_url, git_url } = req.body
       const { authUser: { group } } = req.session
-      const data = await projectInstance.create( { name, group, description })
+      const data = await projectInstance.create( {group, ...req.body})
       res.json({code: 0, data})
     }, () => {
       res.json({code: -2, message: '登录过期'})
