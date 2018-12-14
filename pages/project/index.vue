@@ -99,7 +99,7 @@
         :value="app_url"
         size="400"
         level="H"/>
-      <div slot="footer" />
+      <div slot="footer"/>
     </Modal>
   </div>
 </template>
@@ -124,7 +124,7 @@
     label: '正式地址',
     key: 'pro_url',
     type: 'text',
-  },  {
+  }, {
     label: 'App测试包地址',
     key: 'app_test_url',
     type: 'text',
@@ -183,7 +183,7 @@
       },
       qrCodeClick(url) {
         this.app_url = url;
-       this.qrModal = true;
+        this.qrModal = true;
       },
       clickHandler() {
         this.switchKey = 'add'
@@ -232,14 +232,15 @@
 </script>
 
 <style lang="scss">
-  .vertical-center-modal{
+  .vertical-center-modal {
     display: flex;
     align-items: center;
     justify-content: center;
-    .ivu-modal{
+    .ivu-modal {
       top: 0;
     }
   }
+
   .qrModal {
     .ivu-modal-body {
       text-align: center;
@@ -248,6 +249,7 @@
       display: none;
     }
   }
+
   .mod-project {
     .card-title {
       height: auto;
@@ -255,7 +257,7 @@
       align-items: center;
       justify-content: space-between;
       .qr-code {
-        >div {
+        > div {
           cursor: pointer;
           display: inline-block;
           margin-left: 20px;
