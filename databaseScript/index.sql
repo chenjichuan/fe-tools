@@ -21,21 +21,6 @@ CREATE TABLE `user` (
 INSERT INTO `user` VALUES (12, '63804785', 1, '陈某某', 'chenjichuan', '0', NULL, 1, '2018-12-12 14:13:50', '2018-12-12 14:14:06');
 
 
-/*
- Navicat Premium Data Transfer
-
- Source Server         : web用户
- Source Server Type    : MySQL
- Source Server Version : 80013
- Source Host           : localhost:3306
- Source Schema         : fetools
-
- Target Server Type    : MySQL
- Target Server Version : 80013
- File Encoding         : 65001
-
- Date: 13/12/2018 22:46:21
-*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

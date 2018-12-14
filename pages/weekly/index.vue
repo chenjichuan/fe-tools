@@ -22,11 +22,11 @@
           <h2>任务列表</h2>
           <ButtonGroup>
             <Button
-              :type="isAll ? 'primary' : 'default'"
-              @click.native="changeList()">全部任务</Button>
-            <Button
               :type="!isAll ? 'primary' : 'default'"
-              @click.native="changeList(authUser.userId)">我的任务</Button>
+              @click.native="changeList(false)">我的任务</Button>
+            <Button
+              :type="isAll ? 'primary' : 'default'"
+            @click.native="changeList(true)">全部任务</Button>
           </ButtonGroup>
         </div>
         <upload-btn
@@ -35,7 +35,8 @@
           添加
         </upload-btn>
         <ul class="list-content">
-          <li v-for="(item, index) in list" :key="index" class="list-item">
+          <!--key值作用-->
+          <li v-for="(item) in list" :key="item.project_id" class="list-item">
             <Row type="flex" justify="space-between" align="middle">
               <Col span="12">
                 <div class="flex">
@@ -172,33 +173,39 @@
         pageParams: {
           userId: undefined
         },
+        isAll: false
       }
     },
     computed: {
       ...mapState(['authUser']),
-      isAll() {
-        return !Boolean(this.pageParams['userId'])
-      }
     },
     mounted() {
       this.formData = formData.filter(item => +item.group !== this.$store.state.authUser.group)
       this.getData()
     },
     methods: {
-      changeList(userId) {
-        this.pageParams['userId'] = userId;
-        this.getData();
+      changeList(type) {
+        this.isAll = type;
+        if(type) {
+          this.getData();
+        } else {
+          this.filerMyMiss(this.list);
+        }
+      },
+      filerMyMiss(list) {
+        this.list = list.filter(item => item.userId === this.authUser.userId);
+        this.$nextTick(() => {
+          this.misdMission = this.list.length - this.doneMission
+        })
       },
       getData() {
         getWeekly(this.pageParams).then(res => {
-          this.list = res.data;
+          this.allMession = res.data.length
           if(this.isAll) {
-            this.allMession = this.list.length
+            this.list = res.data;
           } else {
             this.doneMission = 0;
-            this.$nextTick(() => {
-              this.misdMission = this.list.length - this.doneMission
-            })
+            this.filerMyMiss(res.data);
           }
         })
       },
