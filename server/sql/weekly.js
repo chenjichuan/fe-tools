@@ -9,6 +9,7 @@ function weekly (sequelize) {
     project_id: Sequelize.INTEGER,
     project_name: Sequelize.STRING,
     date_range: Sequelize.JSON,
+    simulation_range: Sequelize.JSON,
     owner: Sequelize.STRING,
     fe_name: Sequelize.STRING,
     rd_name: Sequelize.STRING,

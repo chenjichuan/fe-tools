@@ -24,7 +24,7 @@ const weekly = (app, weeklyInstance, memberSql, projectSql) => {
         if(!obj[item.project_id]) {
           obj[item.project_id] = new Array(item);
         } else {
-          obj[item.project_id].unshift(item)
+          obj[item.project_id].push(item)
         }
       })
       let data = []

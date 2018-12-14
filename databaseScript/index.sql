@@ -121,6 +121,7 @@ CREATE TABLE `weekly` (
   `project_id` int(3) NOT NULL,
   `project_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
   `date_range` json DEFAULT NULL,
+  `simulation_range` json DEFAULT NULL,
   `owner` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `fe_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
   `rd_name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '',
