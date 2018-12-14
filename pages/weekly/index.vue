@@ -62,8 +62,8 @@
               </Col>
               <Col span="11" class="info">
               <div class="text" >
-                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'transparent', fontWeight: '600'}">Owner</p>
-                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'transparent', fontWeight: '600'}">
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">Owner</p>
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">
                   {{ item.owner || '缺省' }}
                 </p>
               </div>
