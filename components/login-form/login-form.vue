@@ -7,6 +7,7 @@
     <FormItem prop="username">
       <i-input
         v-model="form.username"
+        :maxlength="20"
         placeholder="请输入用户名">
         <span slot="prepend">
           <Icon
@@ -19,6 +20,7 @@
       <i-input
         v-model="form.password"
         type="password"
+        :maxlength="11"
         placeholder="请输入密码">
         <span slot="prepend">
           <Icon
