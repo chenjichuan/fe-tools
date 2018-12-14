@@ -30,7 +30,13 @@
               @click.native="changeList(true)">全部任务
             </Button>
           </ButtonGroup>
-          <Button size="default" icon="ios-download-outline" type="primary" class="download" @click="exportTable">导出
+          <Button
+            v-if="list.length"
+            size="default"
+            icon="ios-download-outline"
+            type="primary"
+            class="download"
+            @click="exportTable">导出
           </Button>
         </div>
         <upload-btn
