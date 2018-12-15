@@ -8,10 +8,14 @@ const project = (app, projectInstance) => {
     sessionCheck(req).then(async () => {
       const { authUser: { group, userId } } = req.session
       const reault = await projectInstance.find({ group })
-      const data = []
+      const data = [];
+
       reault.forEach(item => {
+        const newItem = JSON.parse(JSON.stringify(item));
+        delete newItem['createdAt'];
+        delete newItem['updatedAt'];
         if (item.group == group) {
-          data.push(item)
+          data.push(newItem)
         }
       })
       res.json({code: 0, data})
@@ -29,8 +33,11 @@ const project = (app, projectInstance) => {
     sessionCheck(req).then(async () => {
       // const { name, description, test_url, pro_url, git_url } = req.body
       const { authUser: { group } } = req.session
-      const data = await projectInstance.create( {group, ...req.body})
-      res.json({code: 0, data})
+      const data = await projectInstance.create( {group, ...req.body});
+      const newData = JSON.parse(JSON.stringify(data));
+      delete newData['createdAt'];
+      delete newData['updatedAt'];
+      res.json({code: 0, data: newData})
     }, () => {
       res.json({code: -2, message: '登录过期'})
     })
@@ -60,11 +67,11 @@ const project = (app, projectInstance) => {
     // 未过期执行
     sessionCheck(req).then(async () => {
       const { id } = req.body
-      const data = await projectInstance.edit({ id }, req.body)
-      if(data.length)
+      projectInstance.edit({ id }, req.body).then(() => {
         res.json({code: 0, data: req.body})
-      else
-        res.json({code: -1, data})
+      }, (err) => {
+        res.json({code: -1, data: err})
+      })
     }, () => {
       res.json({code: -2, message: '登录过期'})
     })
