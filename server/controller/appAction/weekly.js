@@ -20,7 +20,10 @@ const weekly = (app, weeklyInstance, memberSql, projectSql) => {
       const { authUser: { group, username, nickname, userId } } = req.session
       const reault = await weeklyInstance.find({ group })
       const obj = {}
-      reault.forEach(item => {
+      reault.forEach(v => {
+        const item = JSON.parse(JSON.stringify(v));
+        delete item['createdAt'];
+        delete item['updatedAt'];
         if(userId === item.userId) {
           if(nickname) {
             if(item.owner !== nickname) {
