@@ -73,8 +73,13 @@
                 <p v-if="item.date_range[0]">{{ item.date_range[0] }}&nbsp;&nbsp;{{ item.date_range[1] }}</p>
                 <p v-else>未填写</p>
               </div>
-              <div class="text">
+              <div class="text" style="position: relative">
                 <p>联调周期</p>
+                <a
+                  style="position: absolute;right: -100%;top: 0px;"
+                  :haef="item.wiki_url"
+                  target="_blank"
+                  v-if="item.wiki_url">Jira</a>
                 <p v-if="item.simulation_range[0]">{{ item.simulation_range[0] }}&nbsp;&nbsp;{{ item.simulation_range[1]
                   }}</p>
                 <p v-else>未填写</p>
