@@ -78,7 +78,7 @@
                     <p>联调周期</p>
                     <a
                       style="position: absolute;right: 0;top: 0;"
-                      :haef="item.wiki_url"
+                      :href="item.wiki_url"
                       target="_blank"
                       v-if="item.wiki_url">Jira</a>
                     <p v-if="item.simulation_range[0]">{{ item.simulation_range[0] }}&nbsp;&nbsp;{{
