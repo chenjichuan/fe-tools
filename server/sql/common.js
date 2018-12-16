@@ -86,8 +86,56 @@ function memberSql (sequelize) {
   };
 }
 
+// icon log
+function IconLogSql (sequelize) {
+  const Icon = sequelize.define('icon_log', {
+    filename: Sequelize.STRING,
+    userId: Sequelize.STRING,
+  }, {
+    freezeTableName: true,
+    timestamps: true, // //去除createAt updateAt
+  })
+
+  this.findOrCreate = function ({userId}, defaults) {
+    //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
+    const query_or = [
+      {userId},
+    ];
+    return new Promise((resole, reject) => {
+      Icon.findOrCreate({
+        where: {
+          $or: query_or
+        },
+        defaults: {
+          userId,
+          ...defaults
+        }
+      })
+        .spread((item, created) => {
+          if(created === false) {
+            const temp = JSON.stringify(item)
+            item.update({filename: defaults.filename});
+            resole(JSON.parse(temp))
+          } else {
+            resole()
+          }
+        });
+    })
+  };
+
+  this.create = async function({role, name}) {
+    var icons = Icon.create({
+      role,
+      name,
+    });
+    return icons;
+  };
+}
+
+
 module.exports = {
   GroupSql,
   userSql,
-  memberSql
+  memberSql,
+  IconLogSql
 }

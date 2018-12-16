@@ -1,9 +1,12 @@
 var formidable = require('formidable');
 var fs = require('fs');
 var path = require('path');
+const { IconLogSql } = require('../../sql/common')
 const { getLocaIp } = require('../../lib')
 
-const imgUpload = (app) => {
+const imgUpload = (app, INSTANCE) => {
+  // 用户信息查询实例
+  const iconSql = new IconLogSql(INSTANCE);
   app.post('/api/uploadImg', (req, res) => {
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
@@ -44,11 +47,23 @@ const imgUpload = (app) => {
       if(port) {
         port = ':' + port
       }
+      // 本地磁盘是否保留
+      const {authUser: {userId}} = req.session;
+      // 更新日志
+      iconSql.findOrCreate({userId}, {filename}).then(data => {
+        if(data) {
+          // 更新了;
+          // 删除旧的icon
+          fs.unlink(form.uploadDir + '/' + data.filename, new Function);
+        }
+      })
       const data = {
         filename,
         path: `/${filename}`,
         url: protol + host + port + `/${filename}`,
       }
+      // userSqlInstance.edit({userId}, {avatar: data.url});
+
       return res.json({code: 0, data})
     });
 

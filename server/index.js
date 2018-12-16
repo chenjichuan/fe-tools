@@ -62,7 +62,7 @@ async function userActions() {
 }
 
 async function appActions() {
-  imgUpload(app)
+  imgUpload(app, INSTANCE)
   apprAction(app, INSTANCE);
 }
 
