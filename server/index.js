@@ -52,18 +52,14 @@ if (!config.dev) {
   app.set('trust proxy', 1) // trust first proxy
   // serve secure cookies
 }
-/****************
- * global data
- * **************/
-let INSTANCE = '' //数据库主实例
 
 async function userActions() {
-  userAction(app, INSTANCE)
+  userAction(app)
 }
 
 async function appActions() {
-  imgUpload(app, INSTANCE)
-  apprAction(app, INSTANCE);
+  imgUpload(app, global.INSTANCE)
+  apprAction(app);
 }
 
 async function start() {
@@ -90,18 +86,13 @@ async function start() {
 
 async function todo() {
   //初始化数据库
-  INSTANCE = await mysqlInit(Sequelize)
+  global.INSTANCE = await mysqlInit(Sequelize);  //数据库主实例
   // 用户信息
   await userActions()
   // 业务处理
   await appActions()
   // 渲染页面
   await start()
-}
-
-function makeuser() {
-  const userTodo = new UserTodo(INSTANCE)
-  userTodo.create({username: 'test', password: '123'})
 }
 
 todo()

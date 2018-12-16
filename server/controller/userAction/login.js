@@ -1,4 +1,5 @@
 const {sessionStore} = require('../../sessionStore');
+const UserInstance = require('../../sql/user');
 
 function success(req, res, sqlRes) {
   const data = {
@@ -13,43 +14,49 @@ function success(req, res, sqlRes) {
   return res.json({code: 0, data})
 }
 
-const userFn = (app, userInstance) => {
-  /** ******登录登出****** **/
+/** ******登录登出****** **/
 // 发起 POST /api/login 请求完成用户登录，并添加该用户到 req.session.authUser
-  app.post('/api/login', async function (req, res) {
-    const {username, password} = req.body
-    if (username.length > 20 || password.length > 11) {
-      return res.json({code: -4, error: '用户名最大20位，密码11位'})
-    }
+async function loginCallback(req, res) {
+  // 用户信息查询实例
+  const userInstance = new UserInstance(INSTANCE);
 
-    if (!username || !password) {
-      return res.json({code: -1, error: '账号或者密码错误！'})
-    }
+  const {username, password} = req.body
+  if (username.length > 20 || password.length > 11) {
+    return res.json({code: -4, error: '用户名最大20位，密码11位'})
+  }
 
-    userInstance.find({username}).then(findRes => {
-      // 用户名不存在，创建
-      if (!findRes.length) {
-        userInstance.create({username, password}).then(onlyRes => {
-          return success(req, res, onlyRes)
-        })
-      } else { // 存在，校验密码
-        if(findRes[0].password === password) {
-          return success(req, res, findRes[0])
-        } else {
-          res.json({code: -1, error: '密码错误'});
-        }
+  if (!username || !password) {
+    return res.json({code: -1, error: '账号或者密码错误！'})
+  }
+
+  userInstance.find({username}).then(findRes => {
+    // 用户名不存在，创建
+    if (!findRes.length) {
+      userInstance.create({username, password}).then(onlyRes => {
+        return success(req, res, onlyRes)
+      })
+    } else { // 存在，校验密码
+      if(findRes[0].password === password) {
+        return success(req, res, findRes[0])
+      } else {
+        res.json({code: -1, error: '密码错误'});
       }
-    });
-
-  })
+    }
+  });
+}
 
 // 发起 POST /api/logout 请求注销当前用户，并从 req.session 中移除
-  app.post('/api/logout', function (req, res) {
-    sessionStore.destroy(req.session.id, () => {
-      req.session.destroy(); //清除session
-    })
-    res.json({code: 0, ok: true})
+const logoutCallback =  function (req, res) {
+  sessionStore.destroy(req.session.id, () => {
+    req.session.destroy(); //清除session
   })
+  res.json({code: 0, ok: true})
+};
+  // const userInstance = new UserInstance(INSTANCE);
+
+module.exports  = {
+  loginCallback,
+  logoutCallback,
 }
-module.exports = userFn
+
 

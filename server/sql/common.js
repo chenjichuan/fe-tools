@@ -51,7 +51,7 @@ function userSql (sequelize) {
   }
 }
 // members
-function memberSql (sequelize) {
+function MemberSql (sequelize) {
   const Members = sequelize.define('members', {
     role: Sequelize.STRING,
     name: Sequelize.STRING,
@@ -136,6 +136,6 @@ function IconLogSql (sequelize) {
 module.exports = {
   GroupSql,
   userSql,
-  memberSql,
+  MemberSql,
   IconLogSql
 }

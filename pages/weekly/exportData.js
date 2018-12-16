@@ -36,7 +36,4 @@ export const exportData = (title, data, ownerKey, exporter) => {
     columns: columns,
     data: data
   })
-  console.log(columns);
-  console.log(data);
-  // console.log(data);
 }
