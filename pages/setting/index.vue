@@ -125,15 +125,17 @@
         img.src = url;
       },
       handleFormatError(file) {
+        this.progress = false;
         this.$Notice.warning({
           title: 'The file format is incorrect',
           desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
         });
       },
       handleMaxSize(file) {
+        this.progress = false;
         this.$Notice.warning({
           title: 'Exceeding file size limit',
-          desc: 'File  ' + file.name + ' is too large, no more than 8M.'
+          desc: 'File  ' + file.name + ' is too large, no more than 2M.'
         });
       },
       handleBeforeUpload () {
@@ -144,6 +146,7 @@
         this.percent = Math.floor(event.percent)
       },
       handleRrror(error) {
+        this.progress = false;
         console.log(error)
       },
       updataHandler() {
