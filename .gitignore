@@ -81,4 +81,4 @@ dist
 .idea
 
 # server upload dir
-# files_upload
+files_upload
