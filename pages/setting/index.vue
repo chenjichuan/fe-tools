@@ -84,11 +84,11 @@
           group: '',
           avatar: ''
         },
+        percent: 0,
         groupList: [],
         btnLoading: false,
         progress: false,
         visible: false,
-        uploadList: [], // 上传图片列表 单文件就一个
       }
     },
     computed: {
@@ -98,13 +98,6 @@
           color = '#5cb85c';
         }
         return color;
-      },
-      percent() {
-        if (this.uploadList[0]) {
-          return Math.floor(this.uploadList[0].percentage)
-        } else {
-          return 0
-        }
       }
     },
     mounted() {
@@ -127,6 +120,7 @@
         var img = new Image()
         img.onload = () => {
           this.progress = false;
+          this.percent = 0;
         }
         img.src = url;
       },
@@ -143,11 +137,11 @@
         });
       },
       handleBeforeUpload () {
-        this.uploadList = this.$refs.upload.fileList;
         this.progress = true;
         return true;
       },
       handleProgress(event) {
+        this.percent = Math.floor(event.percent)
       },
       handleRrror(error) {
         console.log(error)
