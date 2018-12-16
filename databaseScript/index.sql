@@ -132,3 +132,23 @@ CREATE TABLE `weekly` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for icon_log
+-- ----------------------------
+DROP TABLE IF EXISTS `icon_log`;
+CREATE TABLE `icon_log`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+  `filename` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `createdAt` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  `updatedAt` datetime(6) NOT NULL ON UPDATE CURRENT_TIMESTAMP(6),
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
