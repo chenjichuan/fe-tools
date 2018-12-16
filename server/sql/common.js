@@ -5,14 +5,14 @@
  * ****/
 const Sequelize = require('sequelize');
 
-function GroupSql (sequelize) {
+function GroupSql(sequelize) {
   const Group = sequelize.define('group', {
     name: Sequelize.STRING
   }, {
     freezeTableName: true,
     timestamps: false, // //去除createAt updateAt
   })
-  this.create = async function({name, id}) {
+  this.create = async function ({name, id}) {
     var group = await Group.create({
       id,
       name,
@@ -25,8 +25,9 @@ function GroupSql (sequelize) {
     return target
   }
 }
+
 // 查询user
-function userSql (sequelize) {
+function userSql(sequelize) {
   const User = sequelize.define('user', {
     group: Sequelize.INTEGER,
     nickname: Sequelize.STRING,
@@ -50,8 +51,9 @@ function userSql (sequelize) {
     return target
   }
 }
+
 // members
-function MemberSql (sequelize) {
+function MemberSql(sequelize) {
   const Members = sequelize.define('members', {
     role: Sequelize.STRING,
     name: Sequelize.STRING,
@@ -77,7 +79,7 @@ function MemberSql (sequelize) {
     return target
   };
 
-  this.create = async function({role, name}) {
+  this.create = async function ({role, name}) {
     var members = await Members.create({
       role,
       name,
@@ -87,7 +89,7 @@ function MemberSql (sequelize) {
 }
 
 // icon log
-function IconLogSql (sequelize) {
+function IconLogSql(sequelize) {
   this.Icon = sequelize.define('icon_log', {
     filename: Sequelize.STRING,
     userId: Sequelize.STRING,
@@ -96,6 +98,7 @@ function IconLogSql (sequelize) {
     timestamps: true, // //去除createAt updateAt
   })
 }
+
 IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
   //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
   const query_or = [
@@ -112,7 +115,7 @@ IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
       }
     })
       .spread((item, created) => {
-        if(created === false) {
+        if (created === false) {
           const temp = JSON.stringify(item)
           item.update({filename: defaults.filename});
           resole(JSON.parse(temp))
@@ -123,7 +126,7 @@ IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
   })
 };
 
-IconLogSql.prototype.create = async function({role, name}) {
+IconLogSql.prototype.create = async function ({role, name}) {
   var icons = this.Icon.create({
     role,
     name,

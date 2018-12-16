@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-function weekly (sequelize) {
+function weekly(sequelize) {
   this.WEEKLY = sequelize.define('weekly', {
     userId: Sequelize.STRING,
     group: Sequelize.INTEGER,
@@ -20,17 +20,18 @@ function weekly (sequelize) {
     freezeTableName: true
   });
 }
-weekly.prototype.create = async function(params, extra) {
+
+weekly.prototype.create = async function (params, extra) {
   var Weekly = await this.WEEKLY.create({
     ...params,
     ...extra
   });
   return Weekly;
 };
-weekly.prototype.find = async function ({ userId, group }) {
+weekly.prototype.find = async function ({userId, group}) {
   //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
   let swicher_and = {userId, group};
-  if(userId) {
+  if (userId) {
     swicher_and = {userId, group};
   } else {
     swicher_and = {group};
@@ -48,7 +49,7 @@ weekly.prototype.find = async function ({ userId, group }) {
   return target
 }
 
-weekly.prototype.edit = async ({ id }, data) => {
+weekly.prototype.edit = async function ({id}, data) {
   var resault = await this.WEEKLY.update(data, {
     where: {
       id
@@ -57,7 +58,7 @@ weekly.prototype.edit = async ({ id }, data) => {
   return resault
 }
 
-weekly.prototype.del = async ({ id }) => {
+weekly.prototype.del = async function ({id}) {
   var resault = await this.WEEKLY.destroy({
     where: {
       id

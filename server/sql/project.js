@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-function ProjectSql (sequelize) {
+function ProjectSql(sequelize) {
   this.Project = sequelize.define('project', {
     name: Sequelize.STRING,
     group: Sequelize.INTEGER,
@@ -16,13 +16,13 @@ function ProjectSql (sequelize) {
   })
 }
 
-ProjectSql.prototype.create = async function(data) {
+ProjectSql.prototype.create = async function (data) {
   var project = await this.Project.create({
     ...data
   });
   return project;
 };
-ProjectSql.prototype.find = async function ({ group, id }) {
+ProjectSql.prototype.find = async function ({group, id}) {
   //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
   const swicher = {group};
   const query = [
@@ -38,7 +38,7 @@ ProjectSql.prototype.find = async function ({ group, id }) {
   return target
 }
 
-ProjectSql.prototype.edit = async ({ id }, data) => {
+ProjectSql.prototype.edit = async function ({id}, data) {
   var resault = await this.Project.update(data, {
     where: {
       id
@@ -47,7 +47,7 @@ ProjectSql.prototype.edit = async ({ id }, data) => {
   return resault
 }
 
-ProjectSql.prototype.del = async ({ id }) => {
+ProjectSql.prototype.del = async function ({id}) {
   var resault = await this.Project.destroy({
     where: {
       id
