@@ -77,6 +77,7 @@
       title() {
         const breadCrumbList = this.app.breadCrumbList
         const current = breadCrumbList[breadCrumbList.length - 1];
+        console.log(breadCrumbList)
         if(current) {
           return current.title || current.valueText
         } else {

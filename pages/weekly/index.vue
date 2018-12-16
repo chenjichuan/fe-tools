@@ -75,7 +75,7 @@
                     <p v-else>未填写</p>
                   </div>
                   <div class="text" style="position: relative">
-                    <p>联调周期</p>
+                    <p style="padding-right: 30px">联调周期</p>
                     <a
                       style="position: absolute;right: 0;top: 0;"
                       :href="item.wiki_url"
