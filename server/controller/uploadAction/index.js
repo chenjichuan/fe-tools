@@ -15,7 +15,7 @@ const imgUpload = (app, INSTANCE) => {
     form.type = 'multipart';
 // form.maxFieldsSize = 1 * 1024 * 1024; //单个拆分文件的大小 1M
 // form.maxFields = 1000; // 其他参数限制
-    form.maxFileSize = 10 * 1024 * 1024; //限制上传文件的大小 10M
+    form.maxFileSize = 2 * 1024 * 1024; //限制上传文件的大小 10M
     form.hash = true;
 
     form.parse(req, function (err, fields, files) {
@@ -24,7 +24,7 @@ const imgUpload = (app, INSTANCE) => {
       * files:表示所有的和上传文件相关的内容*/
       if (err) {
         throw err;
-        return;
+        return res.json({code: -1, data: err})
       }
 
       const img_basename = path.basename(files.image.path);

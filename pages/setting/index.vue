@@ -44,7 +44,7 @@
             name="image"
             :show-upload-list="false"
             :format="['jpg','jpeg','png']"
-            :max-size="2048 * 4"
+            :max-size="2048"
             :on-format-error="handleFormatError"
             :on-exceeded-size="handleMaxSize"
             :on-success="handleSuccess"
