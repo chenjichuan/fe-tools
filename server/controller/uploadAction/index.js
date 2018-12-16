@@ -49,21 +49,14 @@ const imgUpload = (app, INSTANCE) => {
       } else {
         port = '';
       }
-      // 本地磁盘是否保留
-      const {authUser: {userId}} = req.session;
-      // 更新日志
-      iconSql.findOrCreate({userId}, {filename}).then(data => {
-        if(data) {
-          // 更新了;
-          // 删除旧的icon
-          fs.unlink(form.uploadDir + '/' + data.filename, new Function);
-        }
-      })
       const data = {
         filename,
         path: `/${filename}`,
         url: protol + host + port + `/${filename}`,
       }
+      const {authUser: {userId}} = req.session;
+      // 更新日志
+      iconSql.findOrCreate({userId}, {filename: path.resolve(form.uploadDir) + `/${filename}`}).then(data => {})
       return res.json({code: 0, data})
     });
   })

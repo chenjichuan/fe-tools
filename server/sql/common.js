@@ -91,6 +91,7 @@ function MemberSql(sequelize) {
 // icon log
 function IconLogSql(sequelize) {
   this.Icon = sequelize.define('icon_log', {
+    filename_current: Sequelize.STRING,
     filename: Sequelize.STRING,
     userId: Sequelize.STRING,
   }, {
@@ -98,6 +99,14 @@ function IconLogSql(sequelize) {
     timestamps: true, // //去除createAt updateAt
   })
 }
+IconLogSql.prototype.find = async function ({userId}) {
+  var icons = this.Icon.findAll({
+    where:{
+      userId
+    }
+  });
+  return icons;
+};
 
 IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
   //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
@@ -117,7 +126,7 @@ IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
       .spread((item, created) => {
         if (created === false) {
           const temp = JSON.stringify(item)
-          item.update({filename: defaults.filename});
+          item.update({filename_current: defaults.filename});
           resole(JSON.parse(temp))
         } else {
           resole()

@@ -14,7 +14,6 @@ function UserSql(sequelize) {
     // timestamps: false, // //去除createAt updateAt
   })
 }
-
 UserSql.prototype.create = async function ({username, password, avatar}) {
   var user = await this.User.create({
     userId: uuid(8, 10).toString(),
@@ -43,7 +42,7 @@ UserSql.prototype.find = async function ({id, userId, username, password}) {
   return target
 }
 
-UserSql.prototype.edit = async function ({userId}, data) {
+UserSql.prototype.edit = async function({userId}, data){
   var resault = await this.User.update(data, {
     where: {
       userId

@@ -131,6 +131,7 @@
         var img = new Image()
         img.onload = () => {
           this.progress = false;
+          this.uploadList = []
         }
         img.src = url;
       },
