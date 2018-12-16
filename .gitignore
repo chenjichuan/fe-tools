@@ -79,3 +79,6 @@ dist
 
 # IDE
 .idea
+
+# server upload dir
+files_upload

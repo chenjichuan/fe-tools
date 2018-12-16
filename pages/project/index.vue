@@ -52,9 +52,11 @@
             </div>
             <div class="content">
               <p class="description">{{ item.description || '很懒，暂无描述' }}</p>
-              <a :href="item.test_url" target="_blank" v-if="item.test_url">测试地址</a>&nbsp;&nbsp;&nbsp;
-              <a :href="item.pro_url" target="_blank" v-if="item.pro_url">线上地址</a>
-              <a :href="item.git_url" target="_blank" v-if="item.git_url" style="float: right">git地址</a>
+              <div class="urls">
+                <a :href="item.test_url" target="_blank" v-if="item.test_url">测试地址</a>&nbsp;&nbsp;&nbsp;
+                <a :href="item.pro_url" target="_blank" v-if="item.pro_url">线上地址</a>
+                <a :href="item.git_url" target="_blank" v-if="item.git_url" style="float: right">git地址</a>
+              </div>
             </div>
 
             <footer class="card-footer">
@@ -267,7 +269,6 @@
           display: inline-block;
           margin-left: 20px;
         }
-        /*margin-left: 30%;*/
       }
     }
     .ivu-card {

@@ -14,10 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
-    "body-parser": "^1.18.3",
-    "cross-env": "^5.2.0",
     "es6-promise": "^4.2.5",
-    "express": "^4.16.3",
     "iview": "^3.1.5",
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
@@ -27,6 +24,10 @@
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
+    "express": "^4.16.3",
+    "formidable": "^1.2.1",
+    "body-parser": "^1.18.3",
+    "cross-env": "^5.2.0",
     "@nuxtjs/style-resources": "^0.1.1",
     "babel-eslint": "^8.2.1",
     "eslint": "^5.0.1",

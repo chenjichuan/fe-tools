@@ -5,44 +5,58 @@
         <h1>基本设置</h1>
         <Row type="flex" align="top" class="code-row-bg">
           <Col span="8" style="min-width: 200px;">
-            <Form :model="formTop" label-position="top">
-              <FormItem label="用户名" class="username">
-                <i-input v-model="formTop.username" disabled placeholder="Enter something..."/>
-              </FormItem>
-              <FormItem label="昵称">
-                <i-input v-model="formTop.nickname"/>
-              </FormItem>
-              <FormItem label="team 组">
-                <Select
-                  style="width: 200px;"
-                  v-model="formTop.group">
-                  <Option v-for="item in groupList" :value="+item.id" :key="item.id">{{ item.name }}</Option>
-                </Select>
-              </FormItem>
-            </Form>
+          <Form :model="formTop" label-position="top">
+            <FormItem label="用户名" class="username">
+              <i-input v-model="formTop.username" disabled placeholder="Enter something..."/>
+            </FormItem>
+            <FormItem label="昵称">
+              <i-input v-model="formTop.nickname"/>
+            </FormItem>
+            <FormItem label="team 组">
+              <Select
+                style="width: 200px;"
+                v-model="formTop.group">
+                <Option v-for="item in groupList" :value="+item.id" :key="item.id">{{ item.name }}</Option>
+              </Select>
+            </FormItem>
+          </Form>
           </Col>
           <Col :xs="{ span: 5, offset: 2 }">
-            <div class="avator">
-              <p>头像</p>
-              <div class="upload-list">
-                <Avatar
-                  :src="formTop.avatar"
-                  v-show="!uploading"
-                  :icon="!formTop.avatar ? 'ios-contact' : ''"
-                  size="large"/>
-                <i-circle :percent="percent" class="progress" :stroke-color="color" v-show="uploading">
-                  <Icon v-if="percent == 100" type="ios-checkmark" size="60" style="color:#5cb85c"/>
-                  <span v-else style="font-size:24px">{{ percent }}%</span>
-                </i-circle>
-                <div class="upload-list-cover" v-if="formTop.avatar">
-                  <Icon type="ios-eye-outline" @click.native="visible = true"/>
-                </div>
+          <div class="avator">
+            <p>头像</p>
+            <div class="upload-list">
+              <i-circle :percent="percent" class="progress" :stroke-color="color" v-if="progress">
+                <Icon v-if="percent == 100" type="ios-checkmark" size="60" style="color:#5cb85c"/>
+                <span v-else style="font-size:24px">{{ percent }}%</span>
+              </i-circle>
+              <Avatar
+                :src="formTop.avatar"
+                v-else
+                :icon="!formTop.avatar ? 'ios-contact' : ''"
+                size="large"/>
+              <div class="upload-list-cover" v-if="formTop.avatar">
+                <Icon type="ios-eye-outline" @click.native="visible = true"/>
               </div>
             </div>
-            <Button icon="md-cloud-upload" style="margin-left: 20px; margin-top: 10px;" @click="upload">
-              <input type="file" style="display: none">
+          </div>
+          <Upload
+            ref="upload"
+            name="image"
+            :show-upload-list="false"
+            :format="['jpg','jpeg','png']"
+            :max-size="2048 * 4"
+            :on-format-error="handleFormatError"
+            :on-exceeded-size="handleMaxSize"
+            :on-success="handleSuccess"
+            :on-error="handleRrror"
+            :on-progress="handleProgress"
+            :multiple="false"
+            type="select"
+            action="/api/uploadImg">
+            <Button icon="md-cloud-upload" style="margin-left: 20px; margin-top: 10px;">
               <span>更换头像</span>
             </Button>
+          </Upload>
           </Col>
         </Row>
         <Button size="large" type="primary" @click="updataHandler" :loading="btnLoading">更新基本信息</Button>
@@ -69,11 +83,11 @@
           group: '',
           avatar: ''
         },
-        uploading: false,
-        percent: 0,
         groupList: [],
         btnLoading: false,
-        visible: false
+        progress: false,
+        visible: false,
+        uploadList: [], // 上传图片列表 单文件就一个
       }
     },
     computed: {
@@ -83,9 +97,22 @@
           color = '#5cb85c';
         }
         return color;
+      },
+      percent() {
+        if (this.uploadList[0]) {
+          return Math.floor(this.uploadList[0].percentage)
+        } else {
+          return 0
+        }
+      }
+    },
+    watch: {
+      uploadList(nV) {
+
       }
     },
     mounted() {
+      this.uploadList = this.$refs.upload.fileList;
       getCurrentUser().then(({data}) => {
         this.formTop = data
         this.formTop.avatar = data.avatar
@@ -94,42 +121,45 @@
         this.groupList = data
       })
     },
+
     methods: {
       ...mapMutations(['resetUserInfo']),
       ...mapActions(['getMenuList']),
-      upload() {
-        const me = this
-        const options = {
-          onStart(res) {
-            me.uploading = true
-          },
-          onProgress(file) {
-            me.percent = file.percentComplete
-          },
-          onSuccess(res) {
-            if (res.files && res.files[0] && res.files[0].link) {
-              const imgLink = res.files[0].link
-
-              const img = new Image()
-              img.onload = () => {
-                me.uploading = false
-                me.$nextTick(() => [
-                  me.percent = 0
-                ])
-              }
-              img.src = imgLink
-              me.formTop.avatar = imgLink
-            } else {
-              me.$Message.error('上传失败')
-              me.uploading = false
-            }
-          },
-          onError(res) {
-            me.$Message.error('上传失败')
-            me.uploading = false
-          }
+      handleSuccess(res, file) {
+        const { url } = res.data;
+        this.formTop.avatar = url;
+        var img = new Image()
+        img.onload = () => {
+          this.progress = false;
         }
-        // ajaxUp(options)
+        img.src = url;
+      },
+      handleFormatError(file) {
+        this.$Notice.warning({
+          title: 'The file format is incorrect',
+          desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
+        });
+      },
+      handleMaxSize(file) {
+        this.$Notice.warning({
+          title: 'Exceeding file size limit',
+          desc: 'File  ' + file.name + ' is too large, no more than 8M.'
+        });
+      },
+//      handleBeforeUpload () {
+//        const check = this.uploadList.length < 5;
+//        if (!check) {
+//          this.$Notice.warning({
+//            title: 'Up to five pictures can be uploaded.'
+//          });
+//        }
+//        return check;
+//      },
+      handleProgress(event) {
+        this.progress = true;
+      },
+      handleRrror(error) {
+        console.log(error)
       },
       updataHandler() {
         this.btnLoading = true;

@@ -1,7 +1,7 @@
 const express = require('express')
-const consola = require('consola') // 美化打印模块
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
+const consola = require('consola') // 美化打印模块
 const { sessionStore } = require('./sessionStore');
 
 const {Nuxt, Builder} = require('nuxt')
@@ -12,6 +12,8 @@ const mysqlInit = require('./sql/connect')
 const userAction = require('./controller/userAction')
 // 业务逻辑
 const apprAction = require('./controller/appAction')
+// 图片上传
+const imgUpload = require('./controller/uploadAction')
 
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
@@ -27,36 +29,40 @@ if (config.dev) {
   port = 80;
 }
 
-app.set('port', port)
+app.set('port', port) // 端口设置
 
+// Body parser，用来封装 req.body
+app.use(bodyParser.json());
 
+// 映射图片目录
+app.use(express.static(__dirname + '../../files_upload/icons'));
+
+// session 设置
+var sess = {
+  secret: 'super-secret-key',
+  resave: true,
+  saveUninitialized: false,
+  store: sessionStore,
+  cookie: {maxAge: 60000 * 10 * 6} // 60分钟
+}
+// Sessions 来创建 req.session
+app.use(session(sess))
+
+if (!config.dev) {
+  app.set('trust proxy', 1) // trust first proxy
+  // serve secure cookies
+}
 /****************
  * global data
  * **************/
 let INSTANCE = '' //数据库主实例
 
 async function userActions() {
-  // Body parser，用来封装 req.body
-  app.use(bodyParser.json())
-  var sess = {
-    secret: 'super-secret-key',
-    resave: true,
-    saveUninitialized: false,
-    store: sessionStore,
-    cookie: {maxAge: 60000 * 10 * 6} // 60分钟
-  }
-  if (!config.dev) {
-    app.set('trust proxy', 1) // trust first proxy
-    // serve secure cookies
-  }
-// Sessions 来创建 req.session
-  app.use(session(sess))
-
   userAction(app, INSTANCE)
 }
 
 async function appActions() {
-
+  imgUpload(app)
   apprAction(app, INSTANCE);
 }
 
