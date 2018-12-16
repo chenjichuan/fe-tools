@@ -46,6 +46,8 @@ const imgUpload = (app, INSTANCE) => {
       let port = origin.split('//')[1].split(':')[1];
       if(port) {
         port = ':' + port
+      } else {
+        port = '';
       }
       // 本地磁盘是否保留
       const {authUser: {userId}} = req.session;
@@ -62,19 +64,8 @@ const imgUpload = (app, INSTANCE) => {
         path: `/${filename}`,
         url: protol + host + port + `/${filename}`,
       }
-      // userSqlInstance.edit({userId}, {avatar: data.url});
-
       return res.json({code: 0, data})
     });
-
-
-    // form.on('progress', function(bytesReceived, bytesExpected) {
-    //   console.log('field', bytesReceived, bytesExpected)
-    // });
-    // // form.on('end')
-    // form.on('error', function(err) {
-    //   return res.json({code: -1, data: err})
-    // });
   })
 }
 
