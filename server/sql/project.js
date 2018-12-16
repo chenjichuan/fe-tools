@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 function ProjectSql (sequelize) {
-  const Project = sequelize.define('project', {
+  this.Project = sequelize.define('project', {
     name: Sequelize.STRING,
     group: Sequelize.INTEGER,
     test_url: Sequelize.INTEGER,
@@ -14,45 +14,45 @@ function ProjectSql (sequelize) {
     freezeTableName: true,
     timestamps: true
   })
-  this.create = async function(data) {
-    var project = await Project.create({
-      ...data
-    });
-    return project;
-  };
-  this.find = async function ({ group, id }) {
-    //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
-    const swicher = {group};
-    const query = [
-      swicher,
-      {id}
-    ]
-    var target = await Project.findAll({
-      where: {
-        $or: query
-      },
-      order: 'updatedAt DESC'
-    });
-    return target
-  }
-
-  this.edit = async ({ id }, data) => {
-    var resault = await Project.update(data, {
-      where: {
-        id
-      }
-    });
-    return resault
-  }
-
-  this.del = async ({ id }) => {
-    var resault = await Project.destroy({
-      where: {
-        id
-      }
-    });
-    return resault
-  }
 }
 
+ProjectSql.prototype.create = async function(data) {
+  var project = await this.Project.create({
+    ...data
+  });
+  return project;
+};
+ProjectSql.prototype.find = async function ({ group, id }) {
+  //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
+  const swicher = {group};
+  const query = [
+    swicher,
+    {id}
+  ]
+  var target = await this.Project.findAll({
+    where: {
+      $or: query
+    },
+    order: 'updatedAt DESC'
+  });
+  return target
+}
+
+ProjectSql.prototype.edit = async ({ id }, data) => {
+  var resault = await this.Project.update(data, {
+    where: {
+      id
+    }
+  });
+  return resault
+}
+
+ProjectSql.prototype.del = async ({ id }) => {
+  var resault = await this.Project.destroy({
+    where: {
+      id
+    }
+  });
+  return resault
+}
 module.exports = ProjectSql

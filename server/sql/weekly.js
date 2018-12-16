@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 
 function weekly (sequelize) {
-  var WEEKLY = sequelize.define('weekly', {
+  this.WEEKLY = sequelize.define('weekly', {
     userId: Sequelize.STRING,
     group: Sequelize.INTEGER,
     order: Sequelize.STRING,
@@ -19,51 +19,50 @@ function weekly (sequelize) {
   }, {
     freezeTableName: true
   });
-  this.create = async function(params, extra) {
-    var Weekly = await WEEKLY.create({
-      ...params,
-      ...extra
+}
+weekly.prototype.create = async function(params, extra) {
+  var Weekly = await this.WEEKLY.create({
+    ...params,
+    ...extra
   });
-    return Weekly;
-  };
-  this.find = async function ({ userId, group }) {
-    //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
-    let swicher_and = {userId, group};
-    if(userId) {
-      swicher_and = {userId, group};
-    } else {
-      swicher_and = {group};
-    }
-    const query_or = [
-      swicher_and
-    ]
-    var target = await WEEKLY.findAll({
-      // group: 'project_id', // 去重
-      where: {
-        $or: query_or
-      },
-      order: 'updatedAt DESC',
-    });
-    return target
+  return Weekly;
+};
+weekly.prototype.find = async function ({ userId, group }) {
+  //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
+  let swicher_and = {userId, group};
+  if(userId) {
+    swicher_and = {userId, group};
+  } else {
+    swicher_and = {group};
   }
-
-  this.edit = async ({ id }, data) => {
-    var resault = await WEEKLY.update(data, {
-      where: {
-        id
-      }
-    });
-    return resault
-  }
-
-  this.del = async ({ id }) => {
-    var resault = await WEEKLY.destroy({
-      where: {
-        id
-      }
-    });
-    return resault
-  }
+  const query_or = [
+    swicher_and
+  ]
+  var target = await this.WEEKLY.findAll({
+    // group: 'project_id', // 去重
+    where: {
+      $or: query_or
+    },
+    order: 'updatedAt DESC',
+  });
+  return target
 }
 
+weekly.prototype.edit = async ({ id }, data) => {
+  var resault = await this.WEEKLY.update(data, {
+    where: {
+      id
+    }
+  });
+  return resault
+}
+
+weekly.prototype.del = async ({ id }) => {
+  var resault = await this.WEEKLY.destroy({
+    where: {
+      id
+    }
+  });
+  return resault
+}
 module.exports = weekly
