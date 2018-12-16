@@ -1,7 +1,6 @@
 const {sessionCheck} = require('../../lib/index')
 const ProjectInstance = require('../../sql/project'); // 数据库实例
 
-
 const getProjectCallback = function (req, res)  {
   const projectInstance = new ProjectInstance(global.INSTANCE);
 
