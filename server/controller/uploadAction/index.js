@@ -10,7 +10,7 @@ const imgUpload = (app, INSTANCE) => {
   app.post('/api/uploadImg', (req, res) => {
     var form = new formidable.IncomingForm();
     form.encoding = 'utf-8';
-    form.uploadDir = __dirname + '../../../../files_upload/icons';
+    form.uploadDir = __dirname + '/../../../files_upload/icons';
     form.keepExtensions = true; // 包含原始属性的扩展名
     form.type = 'multipart';
 // form.maxFieldsSize = 1 * 1024 * 1024; //单个拆分文件的大小 1M
