@@ -58,17 +58,22 @@ const updateUserInfoCallback =  async function (req, res) {
       req.session.authUser.avatar = req.body.avatar
       req.session.authUser.group = req.body.group
       req.session.authUser.nickname = req.body.nickname;
-      sessionStore.set(req.session.id, req.session, () => {});
 
-      // var locaIcondir = path.resolve(__dirname + '/../../../files_upload/icons/');
+      req.session.touch();
+      // req.session.save(function(err) {
+      //   console.log(err)
+      // })
+      // sessionStore.set(req.sessionID, JSON.parse(JSON.stringify(req.body)), () => {});
+
       if(req.body.avatar) {
-        iconSql.find({userId}).then(([icon_log]) => {
-            if(icon_log.filename_current && icon_log.filename) {
-              console.log(icon_log.filename)
-              fs.unlink(icon_log.filename, () => {
-                iconSql.findOrCreate({userId}, {filename: icon_log.filename_current})
+        iconSql.find({userId}).then((icon_logs) => {
+          icon_logs.forEach(item => {
+            if(req.body.avatar.indexOf(path.basename(item.filename)) === -1) {
+              fs.unlink(item.filename, () => {
+                item.destroy()
               });
             }
+          })
         })
       }
     }

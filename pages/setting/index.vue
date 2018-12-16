@@ -50,6 +50,7 @@
             :on-success="handleSuccess"
             :on-error="handleRrror"
             :on-progress="handleProgress"
+            :before-upload="handleBeforeUpload"
             :multiple="false"
             type="select"
             action="/api/uploadImg">
@@ -106,11 +107,6 @@
         }
       }
     },
-    watch: {
-      uploadList(nV) {
-
-      }
-    },
     mounted() {
       this.uploadList = this.$refs.upload.fileList;
       getCurrentUser().then(({data}) => {
@@ -131,7 +127,6 @@
         var img = new Image()
         img.onload = () => {
           this.progress = false;
-          this.uploadList = []
         }
         img.src = url;
       },
@@ -147,17 +142,12 @@
           desc: 'File  ' + file.name + ' is too large, no more than 8M.'
         });
       },
-//      handleBeforeUpload () {
-//        const check = this.uploadList.length < 5;
-//        if (!check) {
-//          this.$Notice.warning({
-//            title: 'Up to five pictures can be uploaded.'
-//          });
-//        }
-//        return check;
-//      },
-      handleProgress(event) {
+      handleBeforeUpload () {
+        this.uploadList = this.$refs.upload.fileList;
         this.progress = true;
+        return true;
+      },
+      handleProgress(event) {
       },
       handleRrror(error) {
         console.log(error)

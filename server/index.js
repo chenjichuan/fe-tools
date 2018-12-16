@@ -35,12 +35,12 @@ app.set('port', port) // 端口设置
 app.use(bodyParser.json());
 
 // 映射图片目录
-app.use(express.static(__dirname + '/../files_upload/icons'));
+app.use(express.static(__dirname + '../../files_upload/icons'));
 
 // session 设置
 var sess = {
   secret: 'super-secret-key',
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   store: sessionStore,
   cookie: {maxAge: 60000 * 10 * 6} // 60分钟

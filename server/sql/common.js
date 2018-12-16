@@ -91,7 +91,6 @@ function MemberSql(sequelize) {
 // icon log
 function IconLogSql(sequelize) {
   this.Icon = sequelize.define('icon_log', {
-    filename_current: Sequelize.STRING,
     filename: Sequelize.STRING,
     userId: Sequelize.STRING,
   }, {
@@ -107,6 +106,7 @@ IconLogSql.prototype.find = async function ({userId}) {
   });
   return icons;
 };
+
 
 IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
   //为了使用复杂一些的查询,如模糊查询等,需要引入Operator
@@ -126,7 +126,7 @@ IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
       .spread((item, created) => {
         if (created === false) {
           const temp = JSON.stringify(item)
-          item.update({filename_current: defaults.filename});
+          item.update({filename: defaults.filename});
           resole(JSON.parse(temp))
         } else {
           resole()
@@ -135,14 +135,13 @@ IconLogSql.prototype.findOrCreate = function ({userId}, defaults) {
   })
 };
 
-IconLogSql.prototype.create = async function ({role, name}) {
-  var icons = this.Icon.create({
-    role,
-    name,
+IconLogSql.prototype.create = async function ({userId, filename}) {
+  var icon = await this.Icon.create({
+    userId,
+    filename,
   });
-  return icons;
+  return icon;
 };
-
 module.exports = {
   GroupSql,
   userSql,

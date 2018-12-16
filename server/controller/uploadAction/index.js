@@ -56,7 +56,8 @@ const imgUpload = (app, INSTANCE) => {
       }
       const {authUser: {userId}} = req.session;
       // 更新日志
-      iconSql.findOrCreate({userId}, {filename: path.resolve(form.uploadDir) + `/${filename}`}).then(data => {})
+      iconSql.create({userId, filename: path.resolve(form.uploadDir) + `/${filename}`});
+
       return res.json({code: 0, data})
     });
   })
