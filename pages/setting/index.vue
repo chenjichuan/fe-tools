@@ -5,7 +5,7 @@
         <h1>基本设置</h1>
         <Row type="flex" align="top" class="code-row-bg">
           <Col span="8" style="min-width: 200px;">
-          <Form :model="formTop" label-position="top">
+            <Form :model="formTop" label-position="top">
             <FormItem label="用户名" class="username">
               <i-input v-model="formTop.username" disabled placeholder="Enter something..."/>
             </FormItem>
@@ -22,7 +22,7 @@
           </Form>
           </Col>
           <Col :xs="{ span: 5, offset: 2 }">
-          <div class="avator">
+            <div class="avator">
             <p>头像</p>
             <div class="upload-list">
               <i-circle :percent="percent" class="progress" :stroke-color="color" v-if="progress">
@@ -40,6 +40,7 @@
             </div>
           </div>
           <Upload
+            style="display: none"
             ref="upload"
             name="image"
             :show-upload-list="false"
@@ -58,24 +59,33 @@
               <span>更换头像</span>
             </Button>
           </Upload>
+            <Button icon="md-cloud-upload" style="margin-left: 20px; margin-top: 10px;" @click = "uploadHandler">
+              <span>更换头像</span>
+            </Button>
           </Col>
         </Row>
         <Button size="large" type="primary" @click="updataHandler" :loading="btnLoading">更新基本信息</Button>
       </Content>
     </Layout>
-    <Modal title="头像预览" v-model="visible" width="650px">
-      <img :src="formTop.avatar" style="width: 100%">
+    <Modal title="上传头像" v-model="visibleCropper" width="850px" class="image-cropper">
+      <Cropper @on-crop="handleCroped" />
       <div slot="footer"/>
     </Modal>
+    <!--<Modal title="头像预览" v-model="visible" width="650px">-->
+      <!--<img :src="formTop.avatar" style="width: 100%">-->
+      <!--<div slot="footer"/>-->
+    <!--</Modal>-->
   </div>
 </template>
 
 <script>
   import {mapMutations, mapActions} from 'vuex'
   import {getGroup} from '@/api'
+  import Cropper from '@/components/cropper'
   import {getCurrentUser, updateUserInfo} from './api'
 
   export default {
+    components: {Cropper},
     data() {
       return {
         formTop: {
@@ -89,6 +99,7 @@
         btnLoading: false,
         progress: false,
         visible: false,
+        visibleCropper: false,
       }
     },
     computed: {
@@ -114,6 +125,18 @@
     methods: {
       ...mapMutations(['resetUserInfo']),
       ...mapActions(['getMenuList']),
+      uploadHandler() {
+        this.visibleCropper = true
+      },
+      handleCroped (blob) {
+        console.log(URL.createObjectURL(blob))
+        this.formTop.avatar = URL.createObjectURL(blob)
+        // const formData = new FormData()
+        // formData.append('image', blob)
+        // uploadImg(formData).then(() => {
+        //   this.$Message.success('Upload success~')
+        // })
+      },
       handleSuccess(res, file) {
         const { url } = res.data;
         this.formTop.avatar = url;
@@ -170,6 +193,12 @@
   }
 </script>
 
+<style lang="scss">
+  /*.image-cropper {*/
+    /*.cropper-wrapper {*/
+    /*}*/
+  /*}*/
+</style>
 <style scoped lang="scss">
   @import "./index";
 </style>
