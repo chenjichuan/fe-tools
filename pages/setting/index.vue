@@ -40,7 +40,6 @@
             </div>
           </div>
           <Upload
-            style="display: none"
             ref="upload"
             name="image"
             :show-upload-list="false"
@@ -59,33 +58,24 @@
               <span>更换头像</span>
             </Button>
           </Upload>
-            <Button icon="md-cloud-upload" style="margin-left: 20px; margin-top: 10px;" @click = "uploadHandler">
-              <span>更换头像</span>
-            </Button>
           </Col>
         </Row>
         <Button size="large" type="primary" @click="updataHandler" :loading="btnLoading">更新基本信息</Button>
       </Content>
     </Layout>
-    <Modal title="上传头像" v-model="visibleCropper" width="850px" class="image-cropper">
-      <Cropper @on-crop="handleCroped" />
+    <Modal title="头像预览" v-model="visible" width="650px">
+      <img :src="formTop.avatar" style="width: 100%">
       <div slot="footer"/>
     </Modal>
-    <!--<Modal title="头像预览" v-model="visible" width="650px">-->
-      <!--<img :src="formTop.avatar" style="width: 100%">-->
-      <!--<div slot="footer"/>-->
-    <!--</Modal>-->
   </div>
 </template>
 
 <script>
   import {mapMutations, mapActions} from 'vuex'
   import {getGroup} from '@/api'
-  import Cropper from '@/components/cropper'
   import {getCurrentUser, updateUserInfo} from './api'
 
   export default {
-    components: {Cropper},
     data() {
       return {
         formTop: {
@@ -99,7 +89,6 @@
         btnLoading: false,
         progress: false,
         visible: false,
-        visibleCropper: false,
       }
     },
     computed: {
@@ -112,7 +101,6 @@
       }
     },
     mounted() {
-      this.uploadList = this.$refs.upload.fileList;
       getCurrentUser().then(({data}) => {
         this.formTop = data
         this.formTop.avatar = data.avatar
@@ -125,18 +113,6 @@
     methods: {
       ...mapMutations(['resetUserInfo']),
       ...mapActions(['getMenuList']),
-      uploadHandler() {
-        this.visibleCropper = true
-      },
-      handleCroped (blob) {
-        console.log(URL.createObjectURL(blob))
-        this.formTop.avatar = URL.createObjectURL(blob)
-        // const formData = new FormData()
-        // formData.append('image', blob)
-        // uploadImg(formData).then(() => {
-        //   this.$Message.success('Upload success~')
-        // })
-      },
       handleSuccess(res, file) {
         const { url } = res.data;
         this.formTop.avatar = url;
