@@ -38,6 +38,12 @@
     "icon": "ios-send"
   },
   {
+    "path": "/chat",
+    "name": "chat",
+    "valueText": "即时会话",
+    "icon": "ios-chatbubbles"
+  },
+  {
     "group": "100",
     "name": "person",
     "valueText": "个人",
