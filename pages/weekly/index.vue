@@ -293,6 +293,8 @@
             ...item,
             project_id: item.project_id.toString()
           }
+        } else {
+          this.formValue = {}
         }
         this.showModel = true
       },

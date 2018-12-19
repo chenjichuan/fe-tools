@@ -1,6 +1,7 @@
 <template>
   <Modal
     v-model="modal"
+    :mask-closable="false"
     @on-cancel="handleReset"
     :title="title">
     <Form ref="formValidate" :model="formParams" :rules="ruleValidate" :label-width="100">
