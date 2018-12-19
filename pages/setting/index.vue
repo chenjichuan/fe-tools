@@ -63,7 +63,7 @@
         <Button size="large" type="primary" @click="updataHandler" :loading="btnLoading">更新基本信息</Button>
       </Content>
     </Layout>
-    <Modal title="头像预览" v-model="visible" width="650px">
+    <Modal title="头像预览" v-model="visible" width="650px" draggable scrollable >
       <img :src="formTop.avatar" style="width: 100%">
       <div slot="footer"/>
     </Modal>
