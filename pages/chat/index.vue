@@ -1,6 +1,6 @@
 <template>
   <div class="mod-chat mod-chat-glb">
-    <Header class="header">
+    <Header class="header noselect" >
       <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
       <Dropdown trigger="click">
         <Badge :count="1">
@@ -14,7 +14,7 @@
     </Header>
     <Layout class="chat-model">
       <Sider hide-trigger class="asside left">
-        <div class="qun">
+        <div class="qun noselect">
           <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
           <span>&nbsp;&nbsp;&nbsp;全组</span>
         </div>
@@ -32,7 +32,7 @@
         </Footer>
       </Layout>
       <Sider hide-trigger class="asside right">
-        <ul>
+        <ul class="noselect">
           <li
             @dblclick="openSolo"
             class="member"
