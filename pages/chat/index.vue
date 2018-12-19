@@ -116,8 +116,7 @@
     width: 100%;
     left: 0;
     top: 0;
-    padding-top: 100px;
-    padding: 100px 20px;
+    padding: 60px 20px;
     .header {
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
@@ -138,7 +137,7 @@
       border-bottom-right-radius: 6px;
       box-shadow: 5px 5px 15px 0 hsla(0, 0%, 84%, .15);
       overflow: hidden;
-      min-height: 600px;
+      min-height: 700px;
 
       .type-area, .content, .asside {
         background-color: #fff;
