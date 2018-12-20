@@ -21,6 +21,7 @@
     "moment": "^2.22.2",
     "nuxt": "^2.3.4",
     "qrcode.vue": "^1.6.1",
+    "socket.io-client": "^2.2.0",
     "vue-ls": "^3.2.0",
     "whatwg-fetch": "^3.0.0"
   },
@@ -28,6 +29,7 @@
     "@nuxtjs/style-resources": "^0.1.1",
     "babel-eslint": "^8.2.1",
     "body-parser": "^1.18.3",
+    "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
     "eslint": "^5.0.1",
     "eslint-loader": "^2.0.0",
@@ -40,9 +42,9 @@
     "less-loader": "^4.1.0",
     "mysql": "^2.16.0",
     "node-sass": "^4.10.0",
-    "nodejs-websocket": "^1.7.2",
     "nodemon": "^1.11.0",
     "sass-loader": "^7.1.0",
-    "sequelize-auto": "^0.4.29"
+    "sequelize-auto": "^0.4.29",
+    "socket.io": "^2.2.0"
   }
 }

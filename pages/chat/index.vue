@@ -1,7 +1,7 @@
 <template>
   <div class="mod-chat mod-chat-glb">
     <div class="main-content">
-      <Header class="header noselect" >
+      <Header class="header noselect">
         <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
         <Dropdown trigger="click">
           <Badge :count="1">
@@ -63,22 +63,26 @@
 
 <script>
   import WebSocket from '@/libs/ws';
-  import { getAllUser } from './api';
+  import io from 'socket.io-client';
+  var socket = io('http://localhost:9001');
+  socket.on('connect', function(){
+    console.log('client connected');
+  });
+  socket.on('event', function(data){
+    console.log(data)
+  });
+  socket.on('disconnect', function(){
+    console.log('client disconnect');
+  });
 
-  const initWS = () => {
-    new WebSocket((ws) => {
-      ws.onmessage((data) => {
-        console.log('%c%s', 'color:green;', data);
-      });
-    });
-  }
+  import {getAllUser} from './api';
+
   export default {
-    components: { },
+    components: {},
     asyncData({store}) {
     },
     data() {
       return {
-        socket: '',
         valueTyp: '',
         activeWin: false,
         members: []
@@ -88,12 +92,13 @@
       getAllUser().then(res => {
         this.members = res.data
       })
-      initWS(this);
     },
-    methods:{
+    beforeDestroy() {
+      socket.emit('get')
+    },
+    methods: {
       openSolo(item) {
         this.activeWin = item;
-        // this.socket.emit('client message', {msg:'hi, server'});
       }
     }
   }
@@ -104,23 +109,23 @@
     .ivu-layout-sider {
       background-color: rgb(245, 245, 245);
     }
-    textarea.ivu-input{
+    textarea.ivu-input {
       border: none;
-      resize:none;
+      resize: none;
       &:focus {
         box-shadow: none;
       }
-      &::-webkit-scrollbar {/*滚动条整体样式*/
-        width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+      &::-webkit-scrollbar { /*滚动条整体样式*/
+        width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
         height: 1px;
       }
-      &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
         border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
         background: rgba(82, 74, 74, 0.32);
       }
-      &::-webkit-scrollbar-track {/*滚动条里面轨道*/
-        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.0);
+      &::-webkit-scrollbar-track { /*滚动条里面轨道*/
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.0);
         border-radius: 10px;
         /*background: #EDEDED;*/
       }

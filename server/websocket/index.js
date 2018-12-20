@@ -1,45 +1,21 @@
-const nws = require('nodejs-websocket');
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
-const nwsServer = nws.createServer(function (connect) {
 
-  /**
-   * 消息
-   */
-  connect.on('text', function (txt) {
-    console.log('onText =:|======> : ' + txt);
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.emit('event', 214563)
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+    socket.emit('event', 213)
   });
 
-  /**
-   * 某次的连接是否关闭
-   */
-  connect.on('close', function (code) {
-    console.info('onClose =:|======> code: ' + code);
+  socket.on('get', function(){
+    console.log('get get get get');
   });
-
-  connect.on('error', function (code, reason) {
-    console.error('onError =:|======> code: ' + code + ' reason: ' + reason);
-  });
-
 });
 
-/**
- * websocket 服务监听 已经启动
- */
-nwsServer.on('listening', function () {
-  console.log('nws.js onListening =:|======>  初始化 nws');
+http.listen(9001, function(){
+  console.log('socket listening on *:9001');
 });
-
-/**
- * websocket 客户端链接事件
- */
-nwsServer.on('connection', function (connect) {
-  console.log('nws.js onConnection =:|======> Your connection key is: ' + connect.key);
-  connect.send('Your connection key is: ' + connect.key);
-  setInterval(() => {
-    connect.send('你好我是 Server' + new Date());
-  }, 5000);
-});
-
-nwsServer.listen(8080);
-
-module.exports = nwsServer;

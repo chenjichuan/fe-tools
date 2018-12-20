@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
 const consola = require('consola') // 美化打印模块
+// const chalk = require('chalk');
 const { sessionStore } = require('./session');
 
 const {Nuxt, Builder} = require('nuxt')
@@ -18,8 +19,9 @@ const imgUpload = require('./controller/uploadAction')
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
 
-// websocket
-require('./websocket');
+
+// console.log(chalk.blue('Hello world!'));
+
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -85,6 +87,10 @@ async function start() {
     message: `Server listening on http://${host}:${port}`,
     badge: true
   })
+// 开启一个进程监听socket
+  const childProcess = require('child_process')
+  childProcess.fork(__dirname + '/./websocket/index.js')
+
 }
 
 async function todo() {
