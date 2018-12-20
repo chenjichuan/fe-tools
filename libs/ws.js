@@ -29,7 +29,7 @@ export default class WS {
         this.intervalId = setInterval(() => {
           console.log('%c%s', 'color:blue;', '=============正在尝试重新连接=============');
           this.main();
-        }, 2000);
+        }, 20000);
       }
     }
   }
