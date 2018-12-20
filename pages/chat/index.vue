@@ -1,79 +1,99 @@
 <template>
   <div class="mod-chat mod-chat-glb">
-    <Header class="header noselect" >
-      <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
-      <Dropdown trigger="click">
-        <Badge :count="1">
-          <Avatar icon="logo-snapchat" size="large" class="me"/>
-        </Badge>
-        <DropdownMenu slot="list">
-          <DropdownItem>上线</DropdownItem>
-          <DropdownItem>下线</DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
-    </Header>
-    <Layout class="chat-model">
-      <Sider hide-trigger class="asside left">
-        <div class="qun noselect">
-          <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
-          <span>&nbsp;&nbsp;&nbsp;全组</span>
-        </div>
-
-      </Sider>
-      <Layout>
-        <Content class="content">Content</Content>
-        <Footer class="type-area">
-          <i-input
-            v-model="valueType"
-            type="textarea"
-            :rows="6"
-            class="input-area"/>
-          <Button id="send">发送</Button>
-        </Footer>
+    <div class="main-content">
+      <Header class="header noselect" >
+        <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
+        <Dropdown trigger="click">
+          <Badge :count="1">
+            <template v-if="$store.state.authUser.avatar">
+              <Avatar :src="$store.state.authUser.avatar" size="large" class="me"/>
+            </template>
+            <template v-else>
+              <Avatar icon="logo-snapchat" size="large" class="me"/>
+            </template>
+          </Badge>
+          <DropdownMenu slot="list">
+            <DropdownItem>上线</DropdownItem>
+            <DropdownItem>下线</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+      </Header>
+      <Layout class="chat-model">
+        <Sider hide-trigger class="asside left">
+          <div
+            @click="activeWin = {userId: '0'}"
+            class="qun noselect hover"
+            :class="{slected: activeWin.userId === '0'}">
+            <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
+            <span>&nbsp;&nbsp;&nbsp;全组</span>
+          </div>
+          <ul class="noselect">
+            <li
+              :class="{slected: activeWin.userId === item.userId}"
+              @click="openSolo(item)"
+              class="member hover"
+              v-for="(item, index) in members"
+              v-if="item.userId !== $store.state.authUser.userId"
+              :key="index">
+              <template v-if="item.avatar">
+                <Avatar style="background: #00a2ae" :src="item.avatar" size="large"/>
+              </template>
+              <template v-else>
+                <Avatar style="background: #00a2ae" icon="ios-person" size="large"/>
+              </template>
+              <span style="margin-left: 10px">{{ item.nickname || item.username }}</span>
+            </li>
+          </ul>
+        </Sider>
+        <Layout>
+          <Content class="content">Content</Content>
+          <Footer class="type-area">
+            <i-input
+              v-model="valueTyp"
+              type="textarea"
+              :rows="5"
+              class="input-area"/>
+            <Button id="send">发送</Button>
+          </Footer>
+        </Layout>
+        <!--<Sider hide-trigger class="asside right">-->
+          <!--<ul class="noselect">-->
+            <!--<li-->
+              <!--@dblclick="openSolo"-->
+              <!--class="member"-->
+              <!--v-for="(item, index) in members"-->
+              <!--:key="index">-->
+              <!--<Avatar style="background: #00a2ae" icon="ios-person"/>-->
+              <!--<span style="margin-left: 10px">{{ item.username }}</span>-->
+            <!--</li>-->
+          <!--</ul>-->
+        <!--</Sider>-->
       </Layout>
-      <Sider hide-trigger class="asside right">
-        <ul class="noselect">
-          <li
-            @dblclick="openSolo"
-            class="member"
-            v-for="(item, index) in members"
-            :key="index">
-            <Avatar style="background: #00a2ae" icon="ios-person"/>
-            <span style="margin-left: 10px">{{ item.username }}</span>
-          </li>
-        </ul>
-      </Sider>
-    </Layout>
-    <Modal v-model="solo" @hide="solo = false"/>
+    </div>
   </div>
-
 </template>
 
 <script>
-  import Modal from '@/components/chat-modal'
+  import { getAllUser } from './api'
   export default {
-    components: { Modal },
+    components: { },
     asyncData({store}) {
     },
     data() {
       return {
-        valueType: '',
-        solo: false,
-        members: [{
-          username: 1,
-        }, {
-          username: 2,
-        }, {
-          username: 3,
-        }]
+        valueTyp: '',
+        activeWin: false,
+        members: []
       }
     },
-    created() {
-
+    mounted() {
+      getAllUser().then(res => {
+        this.members = res.data
+      })
     },
     methods:{
-      openSolo() {
-        this.solo = true;
+      openSolo(item) {
+        this.activeWin = item;
       }
     }
   }
@@ -117,6 +137,11 @@
     left: 0;
     top: 0;
     padding: 60px 20px;
+    .main-content {
+      min-width: 900px;
+      width: 60%;
+      margin: 0 auto;
+    }
     .header {
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
@@ -153,7 +178,7 @@
           height: 75px;
           cursor: pointer;
           padding-left: 28px;
-          background-color: #fbfbfb;
+          /*background-color: #fbfbfb;*/
           padding-top: 16px;
         }
         .member {
@@ -161,14 +186,20 @@
           display: flex;
           justify-content: flex-start;
           align-items: center;
-          > span {
-            cursor: pointer
+          cursor: pointer;
+        }
+        .hover {
+          &:hover {
+            background-color: rgba(235, 247, 255, 0.46);
           }
+        }
+        .slected {
+          background-color: #ebf7ff;
         }
       }
       .type-area {
         border-top: 1px solid #ededed;
-        min-height: 130px;
+        min-height: 120px;
         padding: 0;
         padding-bottom: 10px;
         .input-area {

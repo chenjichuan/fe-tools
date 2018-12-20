@@ -32,6 +32,8 @@ function userSql(sequelize) {
     group: Sequelize.INTEGER,
     nickname: Sequelize.STRING,
     username: Sequelize.STRING,
+    userId: Sequelize.STRING,
+    avatar: Sequelize.STRING,
   }, {
     freezeTableName: true,
     timestamps: false, // //去除createAt updateAt
@@ -48,6 +50,10 @@ function userSql(sequelize) {
         $or: query
       }
     });
+    return target
+  }
+  this.findAll = async function () {
+    var target = await User.findAll();
     return target
   }
 }

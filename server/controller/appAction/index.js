@@ -1,5 +1,6 @@
 const projectTodo = require('./project'); // 项目模块
 const weeklyTodo = require('./weekly'); // 用户项目模块
+const chatTodo = require('./chat'); // 用户项目模块
 const menuTodo = require('./menu');
 
 const apiRouter = require('../apiRouter')
@@ -20,6 +21,9 @@ function main(app) {
   app.post(apiRouter.weekly.addWeekly, weeklyTodo.addWeeklyCallback);
   app.post(apiRouter.weekly.editWeekly, weeklyTodo.editWeeklyCallback);
   app.post(apiRouter.weekly.delWeekly, weeklyTodo.delWeeklyCallback);
+
+  // chat
+  app.get(apiRouter.getUsers, chatTodo.getUserCallback);
 }
 
 module.exports = main

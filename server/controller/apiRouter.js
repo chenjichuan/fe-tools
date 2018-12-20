@@ -1,4 +1,5 @@
 module.exports = {
+  getUsers: '/api/getUsers',
   getMembers: '/api/getMembers',
   getGroup: '/api/getGroup',
   user: {
