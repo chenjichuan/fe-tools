@@ -1,4 +1,4 @@
-const {sessionStore} = require('../../sessionStore');
+const {sessionStore} = require('../../session');
 const UserInstance = require('../../sql/user');
 
 function success(req, res, sqlRes) {

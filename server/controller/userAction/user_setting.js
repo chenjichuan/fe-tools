@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-const {sessionStore} = require('../../sessionStore');
+const {sessionStore} = require('../../session');
 const {sessionCheck} = require('../../lib/index')
 const User = require('../../sql/user');
 const { GroupSql, IconLogSql } = require('../../sql/common');

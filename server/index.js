@@ -2,11 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
 const consola = require('consola') // 美化打印模块
-const { sessionStore } = require('./sessionStore');
+const { sessionStore } = require('./session');
 
 const {Nuxt, Builder} = require('nuxt')
 const Sequelize = require('sequelize');
-const mysqlInit = require('./sql/connect')
+const mysqlInit = require('./sql/connect');
 
 // 用户信息登录等等处理
 const userAction = require('./controller/userAction')
@@ -17,6 +17,9 @@ const imgUpload = require('./controller/uploadAction')
 
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
+
+// websocket
+require('./websocket');
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

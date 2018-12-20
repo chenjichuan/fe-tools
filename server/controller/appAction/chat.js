@@ -1,5 +1,5 @@
 const { userSql } = require('../../sql/common');
-const {sessionCheck} = require('../../lib/index');
+const { sessionCheck } = require('../../lib/index');
 /***
  *  查询用户
  * **/

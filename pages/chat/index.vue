@@ -56,31 +56,29 @@
             <Button id="send">发送</Button>
           </Footer>
         </Layout>
-        <!--<Sider hide-trigger class="asside right">-->
-          <!--<ul class="noselect">-->
-            <!--<li-->
-              <!--@dblclick="openSolo"-->
-              <!--class="member"-->
-              <!--v-for="(item, index) in members"-->
-              <!--:key="index">-->
-              <!--<Avatar style="background: #00a2ae" icon="ios-person"/>-->
-              <!--<span style="margin-left: 10px">{{ item.username }}</span>-->
-            <!--</li>-->
-          <!--</ul>-->
-        <!--</Sider>-->
       </Layout>
     </div>
   </div>
 </template>
 
 <script>
-  import { getAllUser } from './api'
+  import WebSocket from '@/libs/ws';
+  import { getAllUser } from './api';
+
+  const initWS = () => {
+    new WebSocket((ws) => {
+      ws.onmessage((data) => {
+        console.log('%c%s', 'color:green;', data);
+      });
+    });
+  }
   export default {
     components: { },
     asyncData({store}) {
     },
     data() {
       return {
+        socket: '',
         valueTyp: '',
         activeWin: false,
         members: []
@@ -90,10 +88,12 @@
       getAllUser().then(res => {
         this.members = res.data
       })
+      initWS(this);
     },
     methods:{
       openSolo(item) {
         this.activeWin = item;
+        // this.socket.emit('client message', {msg:'hi, server'});
       }
     }
   }
