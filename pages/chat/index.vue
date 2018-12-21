@@ -62,7 +62,6 @@
 </template>
 
 <script>
-  import WebSocket from '@/libs/ws';
   import io from 'socket.io-client';
   var socket = io('http://localhost:9001');
   socket.on('connect', function(){
