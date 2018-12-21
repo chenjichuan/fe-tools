@@ -33,23 +33,50 @@
               @click="openSolo(item)"
               class="member hover"
               v-for="(item, index) in members"
-              v-if="item.userId !== $store.state.authUser.userId"
+              v-if="item.userId !== authUser.userId"
               :key="index">
               <template v-if="item.avatar">
-                <Avatar style="background: #00a2ae" :src="item.avatar" size="large"/>
+                <Avatar class="offline" style="background: #00a2ae" :src="item.avatar" size="large"/>
               </template>
               <template v-else>
-                <Avatar style="background: #00a2ae" icon="ios-person" size="large"/>
+                <Avatar class="offline" style="background: #00a2ae" icon="ios-person" size="large"/>
               </template>
-              <span style="margin-left: 10px">{{ item.nickname || item.username }}</span>
+              <span style="margin-left: 10px" class="offline">{{ item.nickname || item.username }}</span>
             </li>
           </ul>
         </Sider>
         <Layout>
-          <Content class="content">Content</Content>
+          <Content class="content">
+            <!--<pre>{{ valueLer }}</pre>-->
+            <div class="recieve-msg flex">
+              <template v-if="authUser.avatar">
+                <Avatar shape="square" :src="authUser.avatar" size="large"/>
+              </template>
+              <template v-else>
+                <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
+              </template>
+              <div class="right-area">
+                <h3>{{ authUser.nickname || authUser.username }}</h3>
+                <pre class="word"> 3  adasdasdasdasdasdasd
+                  3e</pre>
+              </div>
+            </div>
+            <div class="post-msg flex">
+              <div class="left-area">
+                <pre class="word"> 3  adasdasdasdasdasdasd
+                  3e</pre>
+              </div>
+              <template v-if="authUser.avatar">
+                <Avatar shape="square" :src="authUser.avatar" size="large"/>
+              </template>
+              <template v-else>
+                <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
+              </template>
+            </div>
+          </Content>
           <Footer class="type-area">
             <i-input
-              v-model="valueTyp"
+              v-model="valueLer"
               type="textarea"
               :rows="5"
               class="input-area"/>
@@ -71,7 +98,7 @@
     },
     data() {
       return {
-        valueTyp: '',
+        valueLer: '',
         activeWin: false,
         members: []
       }
@@ -80,9 +107,6 @@
       ...mapState(['authUser']),
     },
     beforeMount() {
-      socket.on('online', () => {
-        console.log(222)
-      })
     },
     mounted() {
       getAllUser().then(res => {
@@ -131,6 +155,10 @@
   }
 </style>
 <style lang="scss" scoped>
+  .flex {
+    display: flex;
+    justify-content: start;
+  }
   .mod-chat {
     background: url("../../assets/images/chat_image.jpg");
     background-size: cover;
@@ -165,9 +193,36 @@
       box-shadow: 5px 5px 15px 0 hsla(0, 0%, 84%, .15);
       overflow: hidden;
       min-height: 700px;
-
       .type-area, .content, .asside {
         background-color: #fff;
+      }
+      .content {
+        padding-top: 20px;
+        background-color: #fff;
+        overflow: auto;
+        max-height: 700px;
+        .word {
+          background-color: #fff;
+          border-radius: 4px;
+          border: 1px solid #dde2ea;
+          padding: 8px;
+        }
+        .right-area {
+          margin-left: 10px;
+        }
+        .left-area {
+          margin-right: 10px;
+        }
+        .recieve-msg {
+          margin: 10px 0 0 20px;
+        }
+        .post-msg {
+          justify-content: flex-end;
+          margin: 10px 20px 0 0px;
+          .word {
+            background-color: #b8d45c;
+          }
+        }
       }
       .asside {
         &.left {
@@ -182,6 +237,9 @@
           padding-left: 28px;
           /*background-color: #fbfbfb;*/
           padding-top: 16px;
+          &.slected {
+            background-color: #ebf7ff;
+          }
         }
         .member {
           padding: 14px 30px;
@@ -189,18 +247,20 @@
           justify-content: flex-start;
           align-items: center;
           cursor: pointer;
-          &.offline {
+          .offline {
             @include gray();
           }
-        }
-        .hover {
-          &:hover {
-            background-color: rgba(235, 247, 255, 0.46);
+          &.slected {
+            background-color: #ebf7ff;
+            @include gray-no();
+          }
+          &.hover {
+            &:hover {
+              background-color: rgba(235, 247, 255, 0.46);
+            }
           }
         }
-        .slected {
-          background-color: #ebf7ff;
-        }
+
       }
       .type-area {
         border-top: 1px solid #ededed;

@@ -9,3 +9,10 @@
   -o-filter: grayscale(100%);
   filter: grayscale(100%);
 }
+
+@mixin gray-no() {
+  -webkit-filter: grayscale(0%);
+  -moz-filter: grayscale(0%);
+  -o-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
