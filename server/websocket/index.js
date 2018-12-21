@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const warning = chalk.keyword('orange');
 const error = chalk.bold.red;
 
+var connectMem = new Set()
 io.on('connection', function(socket){
   console.log(chalk.green('a user connected!'));
   const socketId = socket.id;
@@ -18,13 +19,19 @@ io.on('connection', function(socket){
     console.log(chalk.red('user disconnected!'));
   });
 
-  let userId = ''
-  socket.on('online', data => {
-    console.log(warning(data));
-    userId = data;
+  // let userId = ''
+  socket.on('online', userId => {
+    // console.log(warning(data));
+    connectMem.add(userId);
+    socket.broadcast.emit('freshMembers', Array.from(connectMem))
+  });
+
+  socket.on('offline', userId => {
+    connectMem.delete(userId);
+    socket.broadcast.emit('freshMembers', Array.from(connectMem))
   });
 });
 
-http.listen(3000, function(){
+http.listen(8000, function(){
   console.log(chalk.blue('socket success!'));
 });

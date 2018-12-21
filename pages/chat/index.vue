@@ -36,12 +36,22 @@
               v-if="item.userId !== authUser.userId"
               :key="index">
               <template v-if="item.avatar">
-                <Avatar class="offline" style="background: #00a2ae" :src="item.avatar" size="large"/>
+                <Avatar
+                  :class="{offline: onMember.indexOf(item.userId) === -1}"
+                  style="background: #00a2ae" :src="item.avatar"
+                  size="large"/>
               </template>
               <template v-else>
-                <Avatar class="offline" style="background: #00a2ae" icon="ios-person" size="large"/>
+                <Avatar
+                  :class="{offline: onMember.indexOf(item.userId) === -1}"
+                  style="background: #00a2ae" icon="ios-person"
+                  size="large"/>
               </template>
-              <span style="margin-left: 10px" class="offline">{{ item.nickname || item.username }}</span>
+              <span
+                style="margin-left: 10px"
+                :class="{offline: onMember.indexOf(item.userId) === -1}">
+                {{ item.nickname || item.username }}
+              </span>
             </li>
           </ul>
         </Sider>
@@ -100,23 +110,28 @@
       return {
         valueLer: '',
         activeWin: false,
-        members: []
+        members: [],
+        onMember: []
       }
     },
     computed: {
       ...mapState(['authUser']),
     },
     beforeMount() {
+      socket.on('freshMembers', (member) =>{
+        console.log(member)
+        this.onMember = member;
+      })
     },
     mounted() {
       getAllUser().then(res => {
         this.members = res.data
       })
       socket.emit('online', this.authUser.userId)
-
     },
     beforeDestroy() {
-      // socket.removeAllListeners(['connect', 'disconnect']);
+      socket.emit('offline', this.authUser.userId)
+      socket.removeAllListeners(['freshMembers']);
     },
     methods: {
       openSolo(item) {
@@ -157,7 +172,7 @@
 <style lang="scss" scoped>
   .flex {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
   }
   .mod-chat {
     background: url("../../assets/images/chat_image.jpg");
