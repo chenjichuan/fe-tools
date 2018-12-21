@@ -62,6 +62,7 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
   import {getAllUser} from './api';
 
   export default {
@@ -75,14 +76,19 @@
         members: []
       }
     },
+    computed: {
+      ...mapState(['authUser']),
+    },
     beforeMount() {
-
+      socket.on('online', () => {
+        console.log(222)
+      })
     },
     mounted() {
       getAllUser().then(res => {
         this.members = res.data
       })
-
+      socket.emit('online', this.authUser.userId)
 
     },
     beforeDestroy() {
@@ -183,6 +189,9 @@
           justify-content: flex-start;
           align-items: center;
           cursor: pointer;
+          &.offline {
+            @include gray();
+          }
         }
         .hover {
           &:hover {

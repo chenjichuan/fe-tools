@@ -3,15 +3,9 @@
  */
 
 //$bg-gray: #f1f2f7;
-//$bg-green: #f0fbf8;
-//
-//$c-green: #02BF84;
-//$c-orange: #FFA012;
-//$c-blue: #2C85E4;
-//$c-gray: #9296A0; /* disabled */
-//
-//$active-blue: #2C85E4;
-//
-//$mask: rgba(55,59,63,0.60);
-//
-//$footer-height: 52px;
+@mixin gray() {
+  -webkit-filter: grayscale(100%);
+  -moz-filter: grayscale(100%);
+  -o-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
