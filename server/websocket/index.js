@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+const chalk = require('chalk');
 
 
 io.on('connection', function(socket){
@@ -16,6 +17,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(9001, function(){
-  console.log('socket listening on *:9001');
+http.listen(80, function(){
+  console.log(chalk.blue('socket success!'));
 });

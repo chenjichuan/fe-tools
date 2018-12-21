@@ -1,6 +1,6 @@
 <template>
   <div class="mod-chat mod-chat-glb">
-    <div class="main-content">
+    <div class="chat-main-content">
       <Header class="header noselect">
         <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
         <Dropdown trigger="click">
@@ -62,17 +62,17 @@
 </template>
 
 <script>
-  import io from 'socket.io-client';
-  var socket = io('http://localhost:9001');
-  socket.on('connect', function(){
-    console.log('client connected');
-  });
-  socket.on('event', function(data){
-    console.log(data)
-  });
-  socket.on('disconnect', function(){
-    console.log('client disconnect');
-  });
+  // import io from 'socket.io-client';
+  // var socket = io('http://localhost');
+  // socket.on('connect', function(){
+  //   console.log('client connected');
+  // });
+  // socket.on('event', function(data){
+  //   console.log(data)
+  // });
+  // socket.on('disconnect', function(){
+  //   console.log('client disconnect');
+  // });
 
   import {getAllUser} from './api';
 
@@ -93,7 +93,7 @@
       })
     },
     beforeDestroy() {
-      socket.emit('get')
+      // socket.emit('get')
     },
     methods: {
       openSolo(item) {
@@ -134,14 +134,13 @@
 <style lang="scss" scoped>
   .mod-chat {
     position: absolute;
-    height: 100%;
     background: url("../../assets/images/chat_image.jpg");
     background-size: cover;
     width: 100%;
     left: 0;
     top: 0;
     padding: 60px 20px;
-    .main-content {
+    .chat-main-content {
       min-width: 900px;
       width: 60%;
       margin: 0 auto;

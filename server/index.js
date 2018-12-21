@@ -2,7 +2,6 @@ const express = require('express')
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
 const consola = require('consola') // 美化打印模块
-// const chalk = require('chalk');
 const { sessionStore } = require('./session');
 
 const {Nuxt, Builder} = require('nuxt')
@@ -18,9 +17,6 @@ const imgUpload = require('./controller/uploadAction')
 
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
-
-
-// console.log(chalk.blue('Hello world!'));
 
 
 // Import and Set Nuxt.js options

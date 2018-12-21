@@ -21,8 +21,8 @@
     "moment": "^2.22.2",
     "nuxt": "^2.3.4",
     "qrcode.vue": "^1.6.1",
-    "socket.io-client": "^2.2.0",
     "vue-ls": "^3.2.0",
+    "vue-socket.io": "^3.0.4",
     "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
