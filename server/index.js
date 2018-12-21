@@ -18,6 +18,8 @@ const imgUpload = require('./controller/uploadAction')
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
 
+// websocket
+require('./websocket');
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -53,15 +55,6 @@ if (!config.dev) {
   app.set('trust proxy', 1) // trust first proxy
   // serve secure cookies
 }
-
-// // 异地登录
-// app.use(function (req, res, next) {
-//   console.log(req.session)
-//   // req.sessionStore.get(req.query.usrname, function (error, session) {
-//   //   如果session存在，表示用户已在其他地方登录
-//   // });
-//   next()
-// });
 
 async function userActions() {
   userAction(app)

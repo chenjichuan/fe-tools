@@ -23,7 +23,8 @@ async function loginCallback(req, res) {
     sessionStore.all(function (error, sessions) {
       for(var key in sessions) {
         if(username === sessions[key].authUser.username) {
-          sessionStore.destroy(key)
+          sessionStore.destroy(key);
+          global.socket.emit('otherlogin')
         }
       }
     })

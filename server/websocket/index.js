@@ -10,14 +10,15 @@ let thisUser = '';
 
 io.on('connection', function(socket){
   console.log(chalk.green('a user connected!'));
-  const socketId = socket.id;
-
+  // const socketId = socket.id;
+  global.socket = socket;
   // socket.on('disconnecting', () => {
   //   let rooms = Object.keys(socket.rooms);
   //   console.log(error(rooms));
   // });
 
   // let userId = ''
+
   socket.on('online', userId => {
     // console.log(warning(data));
     connectMem.add(userId);
