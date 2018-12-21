@@ -75,19 +75,18 @@
         members: []
       }
     },
+    beforeMount() {
+
+    },
     mounted() {
       getAllUser().then(res => {
         this.members = res.data
       })
-      // this.$nextTick(_ => {
-      //   this.sockets.subscribe('event', (data) => {
-      //     console.log(`%c ${data}`, 'color:green;')
-      //   });
-      // })
+
 
     },
     beforeDestroy() {
-      // socket.emit('get')
+      // socket.removeAllListeners(['connect', 'disconnect']);
     },
     methods: {
       openSolo(item) {
