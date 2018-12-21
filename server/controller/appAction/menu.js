@@ -5,10 +5,11 @@ const fs = require('fs')
 const menu = (app) => {
   /** ******获取menu****** **/
   app.get('/api/getMenuList', function (req, res) {
-    const {authUser: { group = '' }} = req.session;
+    const { authUser = {} } = req.session || {};
+    const { group } = authUser;
     fs.readFile('server/static/menu.json', 'utf8', function (err, data) {
       const objData = JSON.parse(data);
-      let list = objData
+      let list = objData;
       if (+group === 100 || !group) { //游客权限
         list = objData.filter(item => {
           if(item.name === 'home') return true

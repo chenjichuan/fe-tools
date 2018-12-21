@@ -19,10 +19,15 @@ function success(req, res, sqlRes) {
 async function loginCallback(req, res) {
   const {username, password} = req.body;
 
-  // req.sessionStore.get(username, function (error, session) {
-  //   // 如果session存在，表示用户已在其他地方登录
-  //   console.log(session)
-  // });
+  const userOnly = () => {
+    sessionStore.all(function (error, sessions) {
+      for(var key in sessions) {
+        if(username === sessions[key].authUser.username) {
+          sessionStore.destroy(key)
+        }
+      }
+    })
+  }
 
   // 用户信息查询实例
   const userInstance = new UserInstance(INSTANCE);
@@ -43,6 +48,7 @@ async function loginCallback(req, res) {
       })
     } else { // 存在，校验密码
       if(findRes[0].password === password) {
+        userOnly();
         return success(req, res, findRes[0])
       } else {
         res.json({code: -1, error: '密码错误'});
