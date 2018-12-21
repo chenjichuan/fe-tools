@@ -358,4 +358,7 @@
 
 <style scoped lang="scss">
   @import "./index.scss";
+  .mod-weekly {
+    width: 100%;
+  }
 </style>

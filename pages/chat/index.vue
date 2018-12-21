@@ -62,18 +62,6 @@
 </template>
 
 <script>
-  // import io from 'socket.io-client';
-  // var socket = io('http://localhost');
-  // socket.on('connect', function(){
-  //   console.log('client connected');
-  // });
-  // socket.on('event', function(data){
-  //   console.log(data)
-  // });
-  // socket.on('disconnect', function(){
-  //   console.log('client disconnect');
-  // });
-
   import {getAllUser} from './api';
 
   export default {
@@ -91,6 +79,12 @@
       getAllUser().then(res => {
         this.members = res.data
       })
+      // this.$nextTick(_ => {
+      //   this.sockets.subscribe('event', (data) => {
+      //     console.log(`%c ${data}`, 'color:green;')
+      //   });
+      // })
+
     },
     beforeDestroy() {
       // socket.emit('get')
@@ -133,13 +127,13 @@
 </style>
 <style lang="scss" scoped>
   .mod-chat {
-    position: absolute;
     background: url("../../assets/images/chat_image.jpg");
     background-size: cover;
     width: 100%;
-    left: 0;
-    top: 0;
+    margin: -24px;
+    margin-right: -24px;
     padding: 60px 20px;
+    flex: 1;
     .chat-main-content {
       min-width: 900px;
       width: 60%;

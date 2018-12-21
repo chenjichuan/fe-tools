@@ -127,5 +127,7 @@
     position: relative;
     min-height: 260px;
     padding: 24px;
+    display: flex;
+    flex-shrink: 0;
   }
 </style>

@@ -44,7 +44,7 @@ var sess = {
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
-  cookie: {maxAge: 60000 * 10 * 6} // 60分钟
+  cookie: {maxAge: 60000 * 60 * 2} // 120分钟
 }
 // Sessions 来创建 req.session
 app.use(session(sess))

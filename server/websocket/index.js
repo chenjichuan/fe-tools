@@ -5,18 +5,18 @@ const chalk = require('chalk');
 
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.emit('event', 214563)
+  console.log(chalk.green('a user connected!'));
+  socket.emit('event', 222222222)
   socket.on('disconnect', function(){
-    console.log('user disconnected');
-    socket.emit('event', 213)
+    console.log(chalk.red('user disconnected!'));
+    socket.emit('event', 222222222)
   });
 
-  socket.on('get', function(){
-    console.log('get get get get');
+  socket.on('event', function(){
+    console.log(chalk.blue('get get get get!'));
   });
 });
 
-http.listen(80, function(){
+http.listen(3000, function(){
   console.log(chalk.blue('socket success!'));
 });

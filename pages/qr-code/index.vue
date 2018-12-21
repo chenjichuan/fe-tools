@@ -42,6 +42,7 @@
 
 <style lang="scss">
   .mode-qr {
+    width: 100%;
     text-align: center;
     .qr-button {
       border-radius: 22px;

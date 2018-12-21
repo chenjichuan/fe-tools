@@ -284,4 +284,7 @@
 </style>
 <style scoped lang="scss">
   @import "./index.less";
+  .mod-project {
+    width: 100%;
+  }
 </style>

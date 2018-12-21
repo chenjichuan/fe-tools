@@ -169,12 +169,9 @@
   }
 </script>
 
-<style lang="scss">
-  /*.image-cropper {*/
-    /*.cropper-wrapper {*/
-    /*}*/
-  /*}*/
-</style>
 <style scoped lang="scss">
   @import "./index";
+  .mod-setting {
+    width: 100%;
+  }
 </style>
