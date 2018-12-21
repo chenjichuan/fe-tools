@@ -54,6 +54,15 @@ if (!config.dev) {
   // serve secure cookies
 }
 
+// // 异地登录
+// app.use(function (req, res, next) {
+//   console.log(req.session)
+//   // req.sessionStore.get(req.query.usrname, function (error, session) {
+//   //   如果session存在，表示用户已在其他地方登录
+//   // });
+//   next()
+// });
+
 async function userActions() {
   userAction(app)
 }

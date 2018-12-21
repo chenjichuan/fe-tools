@@ -5,7 +5,7 @@ const fs = require('fs')
 const menu = (app) => {
   /** ******获取menu****** **/
   app.get('/api/getMenuList', function (req, res) {
-    const {authUser: {group}} = req.session;
+    const {authUser: { group = '' }} = req.session;
     fs.readFile('server/static/menu.json', 'utf8', function (err, data) {
       const objData = JSON.parse(data);
       let list = objData

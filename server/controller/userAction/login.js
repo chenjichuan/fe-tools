@@ -17,10 +17,16 @@ function success(req, res, sqlRes) {
 /** ******登录登出****** **/
 // 发起 POST /api/login 请求完成用户登录，并添加该用户到 req.session.authUser
 async function loginCallback(req, res) {
+  const {username, password} = req.body;
+
+  // req.sessionStore.get(username, function (error, session) {
+  //   // 如果session存在，表示用户已在其他地方登录
+  //   console.log(session)
+  // });
+
   // 用户信息查询实例
   const userInstance = new UserInstance(INSTANCE);
 
-  const {username, password} = req.body
   if (username.length > 20 || password.length > 11) {
     return res.json({code: -4, error: '用户名最大20位，密码11位'})
   }
