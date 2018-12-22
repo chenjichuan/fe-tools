@@ -40,28 +40,7 @@
       background-color: #fff;
       overflow: auto;
       height: 500px;
-      .word {
-        background-color: #fff;
-        border-radius: 4px;
-        border: 1px solid #dde2ea;
-        padding: 8px;
-      }
-      .right-area {
-        margin-left: 10px;
-      }
-      .left-area {
-        margin-right: 10px;
-      }
-      .recieve-msg {
-        margin: 10px 0 0 20px;
-      }
-      .post-msg {
-        justify-content: flex-end;
-        margin: 10px 20px 0 0px;
-        .word {
-          background-color: #98E165;
-        }
-      }
+
     }
     .asside {
       &.left {

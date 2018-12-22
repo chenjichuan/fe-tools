@@ -3,20 +3,12 @@
     <div class="chat-main-content">
       <Header class="header noselect">
         <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
-        <Dropdown trigger="click">
-          <Badge :count="1">
-            <template v-if="$store.state.authUser.avatar">
-              <Avatar :src="$store.state.authUser.avatar" size="large" class="me"/>
-            </template>
-            <template v-else>
-              <Avatar icon="logo-snapchat" size="large" class="me"/>
-            </template>
-          </Badge>
-          <DropdownMenu slot="list">
-            <DropdownItem>上线</DropdownItem>
-            <DropdownItem>下线</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
+        <template v-if="$store.state.authUser.avatar">
+          <Avatar :src="$store.state.authUser.avatar" size="large" class="me"/>
+        </template>
+        <template v-else>
+          <Avatar icon="logo-snapchat" size="large" class="me"/>
+        </template>
       </Header>
       <Layout class="chat-model">
         <Sider hide-trigger class="asside left">
@@ -24,29 +16,33 @@
             @click="activeWin = {userId: '0'}"
             class="qun noselect hover"
             :class="{slected: activeWin.userId === '0'}">
-            <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
+            <Badge :count="100">
+              <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
+            </Badge>
             <span>&nbsp;&nbsp;&nbsp;全组</span>
           </div>
           <ul class="noselect">
             <li
               :class="{slected: activeWin.userId === item.userId}"
-              @click="openSolo(item)"
+              @click="openTab(item)"
               class="member hover"
               v-for="(item, index) in members"
               v-if="item.userId !== authUser.userId"
               :key="index">
-              <template v-if="item.avatar">
-                <Avatar
-                  :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
-                  style="background: #00a2ae" :src="item.avatar"
-                  size="large"/>
-              </template>
-              <template v-else>
-                <Avatar
-                  :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
-                  style="background: #00a2ae" icon="ios-person"
-                  size="large"/>
-              </template>
+              <Badge :count="100">
+                <template v-if="item.avatar">
+                  <Avatar
+                    :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
+                    style="background: #00a2ae" :src="item.avatar"
+                    size="large"/>
+                </template>
+                <template v-else>
+                  <Avatar
+                    :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
+                    style="background: #00a2ae" icon="ios-person"
+                    size="large"/>
+                </template>
+              </Badge>
               <span
                 style="margin-left: 10px"
                 :class="{offline: onlinePeople.indexOf(item.userId) === -1}">
@@ -57,36 +53,12 @@
         </Sider>
         <Layout>
           <Content class="content" v-scroll>
-            <ul>
-              <template v-for="(item, index) in hotmessges">
-                <li class="recieve-msg flex" v-if="item.type === 'recieve'" :key="index">
-                  <template v-if="item.avatar">
-                    <Avatar shape="square" :src="item.avatar" size="large"/>
-                  </template>
-                  <template v-else>
-                    <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
-                  </template>
-                  <div class="right-area">
-                    <h3>{{ item.nickname || item.username }}</h3>
-                    <pre class="word">{{ item.message }}</pre>
-                  </div>
-                </li>
-
-                <li class="post-msg flex" v-else :key="index">
-                  <div class="left-area">
-                    <pre class="word">{{ item.message }}</pre>
-                  </div>
-                  <template v-if="item.avatar">
-                    <Avatar shape="square" :src="item.avatar" size="large"/>
-                  </template>
-                  <template v-else>
-                    <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
-                  </template>
-                </li>
-              </template>
-
-            </ul>
-
+            <ChatBox
+              v-if="mem.userId === activeWin.userId"
+              v-for="mem in chatBord"
+              :key="mem.userId"
+              :mem="mem"
+              :packages="hotmessges"/>
           </Content>
           <Footer class="type-area">
             <i-input
@@ -103,6 +75,7 @@
 </template>
 
 <script>
+  import ChatBox from '@/components/chat-box'
   import {mapState} from 'vuex'
   import {getAllUser} from './api';
 
@@ -117,7 +90,7 @@
         }
       }
     },
-    components: {},
+    components: {ChatBox},
     asyncData({store}) {
     },
     data() {
@@ -126,9 +99,10 @@
         activeWin: {
           userId: '0'
         },
+        chatBord: [{userId: '0'}],
         members: [],
         onlinePeople: [],
-        hotmessges: []
+        hotmessges: {}
       }
     },
     computed: {
@@ -137,65 +111,106 @@
         return !Boolean(this.valueLer.trim())
       }
     },
-    watch: {
-      hotmessges() {
-
+    watch: {},
+    created() {
+      if (process.client) {
+        getAllUser().then(res => {
+          this.members = res.data;
+          const ids = res.data.map(item => ({userId: item.userId}))
+          this.chatBord = this.chatBord.concat(ids);
+          this.chatBord.forEach(item => {
+            this.$set(this.hotmessges, item.userId, []);
+          });
+        })
+        socket.emit('online', this.authUser.userId, (memberlist) => {
+          this.onlinePeople = memberlist;
+        });
       }
-  },
+    },
     beforeMount() {
       socket.on('freshMembers', (memberlist) => {
         this.onlinePeople = memberlist;
       })
-      socket.on('get message form all', (data) => {
+      const dataRecieve = (key, data) => {
         for (var item of this.members) {
           if (item.userId === data.userId) {
-            this.hotmessges.push({
+            if (!this.hotmessges[key]) {
+              this.hotmessges[key] = [];
+            }
+            const newItem = {
               ...item,
               type: data.type,
+              dateTime: data.dateTime,
               message: data.message
-            })
-            if (this.hotmessges.length >= 200) {
-              this.hotmessges.shift();
+            }
+            this.hotmessges[key].push(newItem);
+            if (this.hotmessges[key].length >= 200) {
+              this.hotmessges[key].shift();
             }
             break;
           }
         }
-        console.log(data)
+        console.log(this.hotmessges)
+      }
+      socket.on('get message form all', (data) => {
+        dataRecieve('0', data)
+      });
+      socket.on('get secret message', (data) => {
+        data.userId = data.from;
+        dataRecieve(data.from, data)
       });
     },
     mounted() {
-      getAllUser().then(res => {
-        this.members = res.data
-      })
-      socket.emit('online', this.authUser.userId, (memberlist) => {
-        this.onlinePeople = memberlist;
-      });
+
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
-      socket.removeAllListeners(['get message form all', 'freshMembers']);
+      socket.removeAllListeners(['get message form all', 'freshMembers', 'get secret message']);
     },
     methods: {
-      openSolo(item) {
+      openTab(item) {
         this.activeWin = item;
       },
       sendMsg() {
-        let trimed = this.valueLer.replace(/[\r\n]$/g, '').trim();
-        const params = {
-          userId: this.authUser.userId,
-          message: trimed
-        }
-        socket.emit('dispach message', params, () => {
-          this.hotmessges.push({
+        const dataDeal = (key, params) => {
+          if (!this.hotmessges[key]) {
+            this.hotmessges[key] = [];
+          }
+          this.hotmessges[key].push({
             ...this.authUser,
             type: 'send',
-            message: trimed
+            message: params.message
           })
-          if (this.hotmessges.length >= 200) {
-            this.hotmessges.shift();
+          if (this.hotmessges[key].length >= 200) {
+            this.hotmessges[key].shift();
           }
           this.valueLer = '';
-        })
+        }
+        const sendBoard = (params) => {
+          socket.emit('dispach message', params, () => {
+            dataDeal('0', params)
+          })
+        }
+        const sendSolo = (params) => {
+          socket.emit('secret message', params, () => {
+            dataDeal(params.to, params)
+          })
+        }
+        let trimed = this.valueLer.replace(/[\r\n]$/g, '').trim();
+        if (this.activeWin.userId === '0') {
+          const params = {
+            userId: this.authUser.userId,
+            message: trimed
+          }
+          sendBoard(params);
+        } else {
+          const params = {
+            from: this.authUser.userId,
+            to: this.activeWin.userId,
+            message: trimed
+          }
+          sendSolo(params)
+        }
       }
     }
   }
@@ -232,6 +247,7 @@
 </style>
 <style lang="scss" scoped>
   @import "./index.scss";
+
   .flex {
     display: flex;
     justify-content: flex-start;

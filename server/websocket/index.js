@@ -25,6 +25,7 @@ function roomEnter(socket, data, callback) {
   // 私有room
   socket.join(data.userId, () => {
     callback(Array.from(connectMem))
+    console.log(socket.rooms)
   });
   // socket.broadcast.emit('freshMembers', Array.from(connectMem));
   socket.to('room001').emit('freshMembers', Array.from(connectMem));
@@ -69,6 +70,17 @@ io.on('connection', function (socket) {
     // 转发
     socket.to('room001').emit('get message form all', {...data, type: 'recieve'});
     fn();
+  });
+
+  // 单发消息
+  socket.on('secret message', (data, fn) => {
+    // 单发
+    // 私有room
+    socket.join(data.to, () => {
+      socket.to(socket.rooms[data.to]).emit('get secret message', {...data, type: 'recieve', dateTime: new Date});
+      console.log(socket.rooms);
+      fn();
+    });
   });
 });
 
