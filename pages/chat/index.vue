@@ -133,7 +133,8 @@
       })
       const dataRecieve = (key, data, type) => {
         // 找到是谁发的
-        for (var item of this.members) {
+        this.members.forEach(item => {
+          console.log(item.userId, data.userId)
           if (item.userId === data.userId) {
             if (!this.hotmessges[key]) {
               this.hotmessges[key] = [];
@@ -153,9 +154,9 @@
               item.count += 1;
             }
           }
-          break;
-        }
+        })
       }
+
 
       socket.on('get message form all', (data) => {
         dataRecieve('0', data, 'all')

@@ -78,7 +78,6 @@ io.on('connection', function (socket) {
     // 私有room
     socket.join(data.to, () => {
       socket.to(socket.rooms[data.to]).emit('get secret message', {...data, type: 'recieve', dateTime: new Date});
-      console.log(socket.rooms);
       fn();
     });
   });
