@@ -18,14 +18,13 @@ function success(req, res, sqlRes) {
 // 发起 POST /api/login 请求完成用户登录，并添加该用户到 req.session.authUser
 async function loginCallback(req, res) {
   const {username, password} = req.body;
-
-  const userOnly = () => {
+  const userOnly = (userId) => {
     sessionStore.all(function (error, sessions) {
       for(var key in sessions) {
-        if(username === sessions[key].authUser.username) {
+        if(userId === sessions[key].authUser.userId) {
           sessionStore.destroy(key);
           try {
-            global.io.sockets.emit('otherlogin')
+            global.io.sockets.to(userId).emit('kickout')
           } catch (e) {}
         }
       }
@@ -51,8 +50,15 @@ async function loginCallback(req, res) {
       })
     } else { // 存在，校验密码
       if(findRes[0].password === password) {
-        userOnly();
-        return success(req, res, findRes[0])
+        try {
+          global.socket.join(findRes[0].userId, () => {
+            userOnly(findRes[0].userId);
+            return success(req, res, findRes[0])
+          })
+        } catch (e) {
+          return success(req, res, findRes[0])
+        }
+
       } else {
         res.json({code: -1, error: '密码错误'});
       }

@@ -17,7 +17,6 @@ try {
 // 全局Io
 global.io = io;
 var connectMem = new Set(); //加入的组员
-var groupMsg = [];
 function roomEnter(socket, data, callback) {
   connectMem.add(data.userId);
   // 成员加入room001组 共有room
@@ -41,7 +40,7 @@ function roomLeave(socket, data) {
 io.on('connection', function (socket) {
   console.log(chalk.green('a user connected!'));
   // 全局socket
-  // global.socket = socket;
+  global.socket = socket;
   // 断开连接
   socket.on('disconnect', () => {
     console.log(chalk.red('user disconnected!'));

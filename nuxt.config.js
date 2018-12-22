@@ -47,7 +47,7 @@ module.exports = {
     {src: '~plugins/vue-ls/index.js', ssr: false},
     {src: '~plugins/iview/index.js', ssr: true},
     {src: '~plugins/fetch/index.js', ssr: false},
-    {src: '~plugins/socket.io/index.js', ssr: false},
+    // {src: '~plugins/socket.io/index.js', ssr: false},
   ],
 
   /*
