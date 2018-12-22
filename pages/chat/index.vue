@@ -1,15 +1,23 @@
 <template>
   <div class="mod-chat mod-chat-glb">
-    <div class="chat-main-content">
-      <Header class="header noselect">
-        <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
-        <template v-if="authUser.avatar">
-          <Avatar :src="authUser.avatar" size="large" class="me"/>
-        </template>
-        <template v-else>
-          <Avatar icon="logo-snapchat" size="large" class="me"/>
-        </template>
-      </Header>
+    <Modal
+      v-model="modal"
+      draggable scrollable
+      footer-hide
+      :mask-closable="false"
+      class-name="chat-main-content"
+      width="900">
+      <div slot="header">
+        <Header class="header noselect">
+          <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
+          <template v-if="authUser.avatar">
+            <Avatar :src="authUser.avatar" size="large" class="me"/>
+          </template>
+          <template v-else>
+            <Avatar icon="logo-snapchat" size="large" class="me"/>
+          </template>
+        </Header>
+      </div>
       <Layout class="chat-model">
         <Sider hide-trigger class="asside left">
           <div
@@ -53,12 +61,14 @@
         </Sider>
         <Layout>
           <Content class="content" v-scroll>
-            <ChatBox
-              v-if="mem.userId === activeWin.userId"
-              v-for="mem in chatBord"
-              :key="mem.userId"
-              :mem="mem"
-              :packages="hotmessges"/>
+            <transition name="fade">
+              <ChatBox
+                v-if="mem.userId === activeWin.userId"
+                v-for="mem in chatBord"
+                :key="mem.userId"
+                :mem="mem"
+                :packages="hotmessges"/>
+            </transition>
           </Content>
           <Footer class="type-area">
             <i-input
@@ -70,7 +80,7 @@
           </Footer>
         </Layout>
       </Layout>
-    </div>
+    </Modal>
   </div>
 </template>
 
@@ -95,6 +105,7 @@
     },
     data() {
       return {
+        modal: false,
         valueLer: '',
         activeWin: {
           userId: '0'
@@ -167,7 +178,7 @@
       });
     },
     mounted() {
-
+      this.modal = true;
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
@@ -225,41 +236,19 @@
 <style lang="scss">
   .mod-chat-glb {
     background-color: #fff;
-    .ivu-layout-sider {
-      background-color: rgb(245, 245, 245);
-    }
-    .content,
-    textarea.ivu-input {
-      border: none;
-      resize: none;
-      &:focus {
-        box-shadow: none;
-      }
-      &::-webkit-scrollbar { /*滚动条整体样式*/
-        width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
-        height: 1px;
-      }
-      &::-webkit-scrollbar-thumb { /*滚动条里面小方块*/
-        border-radius: 10px;
-        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-        background: rgba(82, 74, 74, 0.32);
-      }
-      &::-webkit-scrollbar-track { /*滚动条里面轨道*/
-        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.0);
-        border-radius: 10px;
-        /*background: #EDEDED;*/
-      }
-    }
+  }
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .2s;
+    opacity: 0.5;
+    z-index: -1;
+    position: relative;
+  }
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
   }
 </style>
-<style lang="scss" scoped>
+<style lang="scss">
   @import "./index.scss";
-
-  .flex {
-    display: flex;
-    justify-content: flex-start;
-  }
-
 </style>
 
 
