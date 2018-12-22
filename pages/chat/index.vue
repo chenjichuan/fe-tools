@@ -16,7 +16,7 @@
             @click="activeWin = {userId: '0'}"
             class="qun noselect hover"
             :class="{slected: activeWin.userId === '0'}">
-            <Badge :count="100">
+            <Badge :count="0">
               <Avatar size="large" style="color: #f56a00;background-color: #fde3cf">ALL</Avatar>
             </Badge>
             <span>&nbsp;&nbsp;&nbsp;全组</span>
@@ -131,7 +131,8 @@
       socket.on('freshMembers', (memberlist) => {
         this.onlinePeople = memberlist;
       })
-      const dataRecieve = (key, data) => {
+      const dataRecieve = (key, data, type) => {
+        // 找到是谁发的
         for (var item of this.members) {
           if (item.userId === data.userId) {
             if (!this.hotmessges[key]) {
@@ -147,8 +148,8 @@
             if (this.hotmessges[key].length >= 200) {
               this.hotmessges[key].shift();
             }
-
-            if (this.activeWin.userId !== item.userId) {
+            // 非群发
+            if (this.activeWin.userId !== item.userId && type !== 'all') {
               item.count += 1;
             }
           }
@@ -157,7 +158,7 @@
       }
 
       socket.on('get message form all', (data) => {
-        dataRecieve('0', data)
+        dataRecieve('0', data, 'all')
       });
       socket.on('get secret message', (data) => {
         data.userId = data.from;
