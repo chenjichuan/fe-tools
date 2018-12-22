@@ -85,9 +85,6 @@ async function start() {
     message: `Server listening on http://${host}:${port}`,
     badge: true
   })
-// 开启一个进程监听socket
-  const childProcess = require('child_process')
-  childProcess.fork(__dirname + '/./websocket/index.js')
 
 }
 

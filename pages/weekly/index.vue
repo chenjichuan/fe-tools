@@ -4,16 +4,16 @@
       <Content class="title-card">
         <Row>
           <Col span="8">
-            <span class="top-p">我的待办</span>
-            <p class="bottom-p">{{ misdMission }}个任务</p>
+          <span class="top-p">我的待办</span>
+          <p class="bottom-p">{{ misdMission }}个任务</p>
           </Col>
           <Col span="8">
-            <span class="top-p">总任务数</span>
-            <p class="bottom-p">{{ allMession }}个任务</p>
+          <span class="top-p">总任务数</span>
+          <p class="bottom-p">{{ allMession }}个任务</p>
           </Col>
           <Col span="8">
-            <span class="top-p">本周完成任务</span>
-            <p class="bottom-p">{{ doneMission }}个任务</p>
+          <span class="top-p">本周完成任务</span>
+          <p class="bottom-p">{{ doneMission }}个任务</p>
           </Col>
         </Row>
       </Content>
@@ -50,57 +50,57 @@
           <li v-for="(item) in list" :key="item.id" class="list-item">
             <Row type="flex" justify="space-between" align="middle">
               <Col span="10">
-                <div class="flex">
-                  <Avatar
-                    size="large"
-                    :src="img"/>
-                  <div class="left-icon">
-                    <h3>{{ item.project_name }}</h3>
-                    <p>{{ item.description || '没有说明' }}</p>
-                  </div>
+              <div class="flex">
+                <Avatar
+                  size="large"
+                  :src="img"/>
+                <div class="left-icon">
+                  <h3>{{ item.project_name }}</h3>
+                  <p>{{ item.description || '没有说明' }}</p>
                 </div>
+              </div>
               </Col>
               <Col span="11" class="info">
-                {{ parseData(item) }}
+              {{ parseData(item) }}
+              <div class="text">
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">Owner</p>
+                <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">
+                  {{ item.owner || '缺省' }}
+                </p>
+              </div>
+              <div style="display: inline-block">
                 <div class="text">
-                  <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">Owner</p>
-                  <p :style="{color: authUser.userId === item.userId ? '#5cadff': 'rgba(0, 0, 0, 0.45)'}">
-                    {{ item.owner || '缺省' }}
-                  </p>
+                  <p>开发周期</p>
+                  <p v-if="item.date_range[0]">{{ item.date_range[0] }}&nbsp;&nbsp;{{ item.date_range[1] }}</p>
+                  <p v-else>未填写</p>
                 </div>
-                <div style="display: inline-block">
-                  <div class="text">
-                    <p>开发周期</p>
-                    <p v-if="item.date_range[0]">{{ item.date_range[0] }}&nbsp;&nbsp;{{ item.date_range[1] }}</p>
-                    <p v-else>未填写</p>
-                  </div>
-                  <div class="text" style="position: relative">
-                    <p style="padding-right: 30px">联调周期</p>
-                    <a
-                      style="position: absolute;right: 0;top: 0;"
-                      :href="item.wiki_url"
-                      target="_blank"
-                      v-if="item.wiki_url">Jira</a>
-                    <p v-if="item.simulation_range[0]">{{ item.simulation_range[0] }}&nbsp;&nbsp;{{
-                      item.simulation_range[1]
-                      }}</p>
-                    <p v-else>未填写</p>
-                  </div>
+                <div class="text" style="position: relative">
+                  <p style="padding-right: 30px">联调周期</p>
+                  <a
+                    style="position: absolute;right: 0;top: 0;"
+                    :href="item.wiki_url"
+                    target="_blank"
+                    v-if="item.wiki_url">Jira</a>
+                  <p v-if="item.simulation_range[0]">{{ item.simulation_range[0] }}&nbsp;&nbsp;{{
+                    item.simulation_range[1]
+                    }}</p>
+                  <p v-else>未填写</p>
                 </div>
-                <Progress :percent="item.percent || 0" :stroke-width="5" status="active"/>
+              </div>
+              <Progress :percent="item.percent || 0" :stroke-width="5" status="active"/>
               </Col>
               <Col span="3" class="operation">
-                <template v-if="item.userId === authUser.userId">
-                  <Button type="text" style="color: #1890ff;" @click="clickHandler('edit', item)">编辑</Button>
-                  <Poptip
-                    transfer
-                    style="text-align: left;"
-                    confirm
-                    title="确认删除?"
-                    @on-ok="delHandler(item)">
-                    <Button type="text" style="color: #1890ff;">删除</Button>
-                  </Poptip>
-                </template>
+              <template v-if="item.userId === authUser.userId">
+                <Button type="text" style="color: #1890ff;" @click="clickHandler('edit', item)">编辑</Button>
+                <Poptip
+                  transfer
+                  style="text-align: left;"
+                  confirm
+                  title="确认删除?"
+                  @on-ok="delHandler(item)">
+                  <Button type="text" style="color: #1890ff;">删除</Button>
+                </Poptip>
+              </template>
               </Col>
             </Row>
           </li>
@@ -294,7 +294,9 @@
             project_id: item.project_id.toString()
           }
         } else {
-          this.formValue = {}
+          for (let k of Object.keys(this.formValue)) {
+            this.$delete(this.formValue, k);
+          }
         }
         this.showModel = true
       },
@@ -358,6 +360,7 @@
 
 <style scoped lang="scss">
   @import "./index.scss";
+
   .mod-weekly {
     width: 100%;
   }
