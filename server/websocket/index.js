@@ -25,7 +25,6 @@ function roomEnter(socket, data, callback) {
   // 私有room
   socket.join(data.userId, () => {
     callback(Array.from(connectMem))
-    console.log(socket.rooms)
   });
   // socket.broadcast.emit('freshMembers', Array.from(connectMem));
   socket.to('room001').emit('freshMembers', Array.from(connectMem));
