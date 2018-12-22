@@ -3,8 +3,8 @@
     <div class="chat-main-content">
       <Header class="header noselect">
         <h2 style="color: #fff;font-weight: 500;letter-spacing: 1px;">基于 WebSocket 即时会话</h2>
-        <template v-if="$store.state.authUser.avatar">
-          <Avatar :src="$store.state.authUser.avatar" size="large" class="me"/>
+        <template v-if="authUser.avatar">
+          <Avatar :src="authUser.avatar" size="large" class="me"/>
         </template>
         <template v-else>
           <Avatar icon="logo-snapchat" size="large" class="me"/>
