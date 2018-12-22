@@ -6,7 +6,7 @@
         <Icon type="logo-github" />
       </a>
       <div class="copyright">
-        Copyleft <i class="trans">©</i> 2018. Started in December and never stop.
+        Copyleft <i class="trans">©</i> 2018. Started in Dcember
       </div>
     </footer>
   </div>

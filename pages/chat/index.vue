@@ -90,7 +90,7 @@
               type="textarea"
               :rows="5"
               class="input-area"/>
-            <Button id="send">发送</Button>
+            <Button id="send" @click="sendMsg">发送</Button>
           </Footer>
         </Layout>
       </Layout>
@@ -99,7 +99,7 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
   import {getAllUser} from './api';
 
   export default {
@@ -118,24 +118,36 @@
       ...mapState(['authUser']),
     },
     beforeMount() {
-      socket.on('freshMembers', (member) =>{
+      console.log('beforeMount')
+      socket.on('freshMembers', (member) => {
         console.log(member)
-        this.onMember = member;
+        // this.onMember = member;
       })
+      socket.on('get message form all', (data) => {
+        console.log(data)
+      });
     },
     mounted() {
       getAllUser().then(res => {
         this.members = res.data
       })
-      socket.emit('online', this.authUser.userId)
+      socket.emit('online', this.authUser.userId, (list) => {
+        console.error(list)
+      });
+      // socket.emit('getAll', null, (data) => {
+      //   console.error(data)
+      // })
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
-      socket.removeAllListeners(['freshMembers']);
+      socket.removeAllListeners(['get message form all', 'freshMembers']);
     },
     methods: {
       openSolo(item) {
         this.activeWin = item;
+      },
+      sendMsg() {
+        socket.emit('dispach message', '哈哈')
       }
     }
   }
@@ -174,6 +186,7 @@
     display: flex;
     justify-content: flex-start;
   }
+
   .mod-chat {
     background: url("../../assets/images/chat_image.jpg");
     background-size: cover;

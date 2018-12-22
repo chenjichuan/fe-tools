@@ -4,40 +4,78 @@ var io = require('socket.io')(http);
 const chalk = require('chalk');
 const warning = chalk.keyword('orange');
 const error = chalk.bold.red;
+// console.log(warning(data));
+// socket.broadcast.emit('freshMembers', Array.from(connectMem))
+const fs = require('fs')
 
-var connectMem = new Set();
-let thisUser = '';
+try {
+  global.socket.removeAllListeners();
+  global.io.sockets.removeAllListeners();
+} catch (e) {
+}
 
-io.on('connection', function(socket){
+// 全局Io
+global.io = io;
+var connectMem = new Set(); //加入的组员
+var thisUser = '';
+var groupMsg = [];
+
+function roomEnter(socket, data, callback) {
+  connectMem.add(data.userId);
+  // 私有room
+  socket.join(data.userId, () => {
+    callback((JSON.stringify(socket.rooms)))
+  });
+  socket.broadcast.emit('freshMembers', Array.from(connectMem));
+}
+
+function roomLeave(socket, data) {
+  connectMem.delete(data.userId);
+  socket.leave('room001');
+  socket.leave(data.userId);
+  socket.to('room001').emit('freshMembers', Array.from(connectMem));
+}
+
+io.on('connection', function (socket) {
   console.log(chalk.green('a user connected!'));
-  // const socketId = socket.id;
+  // 全局socket
   global.socket = socket;
-  // socket.on('disconnecting', () => {
-  //   let rooms = Object.keys(socket.rooms);
-  //   console.log(error(rooms));
-  // });
-
-  // let userId = ''
-
-  socket.on('online', userId => {
-    // console.log(warning(data));
-    connectMem.add(userId);
-    socket.broadcast.emit('freshMembers', Array.from(connectMem))
-  });
-
-  socket.on('offline', userId => {
-    thisUser = userId
-    connectMem.delete(userId);
-    socket.broadcast.emit('freshMembers', Array.from(connectMem))
-  });
-
+  // 断开连接
   socket.on('disconnect', () => {
     console.log(chalk.red('user disconnected!'));
-    connectMem.delete(thisUser);
-    socket.broadcast.emit('freshMembers', Array.from(connectMem))
+    roomLeave(socket, {userId: thisUser})
+  });
+
+  /***
+   * *事件
+   * *************************************/
+  // 成员加入room001组 共有room
+  socket.join('room001', () => {
+
+  });
+  // 上线
+  socket.on('online', (userId, callback) => {
+    thisUser = userId;
+    fs.writeFileSync('server/static/members.json', {[userId]: ''});
+    roomEnter(socket, {userId}, callback)
+  });
+  // 离线
+  socket.on('offline', userId => {
+    roomLeave(socket, {userId})
+  });
+  // 获取所有人
+  // socket.on('getAll', (name, fn) => {
+  //   console.log('hahaah:')
+  //   fn(socket.rooms);
+  // });
+  // 群发消息
+  socket.on('dispach message', (data, callback) => {
+    // 转发
+    socket.to('room001').emit('get message form all', data);
   });
 });
 
-http.listen(8000, function(){
+
+http.listen(8000, function () {
   console.log(chalk.blue('socket success!'));
 });
