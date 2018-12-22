@@ -145,7 +145,6 @@
       const dataRecieve = (key, data, type) => {
         // 找到是谁发的
         this.members.forEach(item => {
-          console.log(item.userId, data.userId)
           if (item.userId === data.userId) {
             if (!this.hotmessges[key]) {
               this.hotmessges[key] = [];

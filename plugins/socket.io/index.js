@@ -4,6 +4,8 @@ let isEnv = !(process.env.NODE_ENV === 'production')
 
 export default function () {
   var socket = io(isEnv ? 'http://localhost:8000' : 'http://47.99.215.225:8000');
+  window.io = io;
+  window.socket = socket;
   socket.on('connect', function(){
     console.log('%c client connected！','color:green');
   });
@@ -27,5 +29,4 @@ export default function () {
 
 
 
-// window.io = io;
-// window.socket = socket;
+
