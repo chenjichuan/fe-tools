@@ -25,7 +25,7 @@ async function loginCallback(req, res) {
         if(username === sessions[key].authUser.username) {
           sessionStore.destroy(key);
           try {
-            global.sockets.emit('otherlogin')
+            global.io.sockets.emit('otherlogin')
           } catch (e) {}
         }
       }

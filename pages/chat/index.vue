@@ -37,52 +37,56 @@
               :key="index">
               <template v-if="item.avatar">
                 <Avatar
-                  :class="{offline: onMember.indexOf(item.userId) === -1}"
+                  :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
                   style="background: #00a2ae" :src="item.avatar"
                   size="large"/>
               </template>
               <template v-else>
                 <Avatar
-                  :class="{offline: onMember.indexOf(item.userId) === -1}"
+                  :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
                   style="background: #00a2ae" icon="ios-person"
                   size="large"/>
               </template>
               <span
                 style="margin-left: 10px"
-                :class="{offline: onMember.indexOf(item.userId) === -1}">
+                :class="{offline: onlinePeople.indexOf(item.userId) === -1}">
                 {{ item.nickname || item.username }}
               </span>
             </li>
           </ul>
         </Sider>
         <Layout>
-          <Content class="content">
-            <!--<pre>{{ valueLer }}</pre>-->
-            <div class="recieve-msg flex">
-              <template v-if="authUser.avatar">
-                <Avatar shape="square" :src="authUser.avatar" size="large"/>
+          <Content class="content" v-scroll>
+            <ul>
+              <template v-for="(item, index) in hotmessges">
+                <li class="recieve-msg flex" v-if="item.type === 'recieve'" :key="index">
+                  <template v-if="item.avatar">
+                    <Avatar shape="square" :src="item.avatar" size="large"/>
+                  </template>
+                  <template v-else>
+                    <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
+                  </template>
+                  <div class="right-area">
+                    <h3>{{ item.nickname || item.username }}</h3>
+                    <pre class="word">{{ item.message }}</pre>
+                  </div>
+                </li>
+
+                <li class="post-msg flex" v-else :key="index">
+                  <div class="left-area">
+                    <pre class="word">{{ item.message }}</pre>
+                  </div>
+                  <template v-if="item.avatar">
+                    <Avatar shape="square" :src="item.avatar" size="large"/>
+                  </template>
+                  <template v-else>
+                    <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
+                  </template>
+                </li>
               </template>
-              <template v-else>
-                <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
-              </template>
-              <div class="right-area">
-                <h3>{{ authUser.nickname || authUser.username }}</h3>
-                <pre class="word"> 3  adasdasdasdasdasdasd
-                  3e</pre>
-              </div>
-            </div>
-            <div class="post-msg flex">
-              <div class="left-area">
-                <pre class="word"> 3  adasdasdasdasdasdasd
-                  3e</pre>
-              </div>
-              <template v-if="authUser.avatar">
-                <Avatar shape="square" :src="authUser.avatar" size="large"/>
-              </template>
-              <template v-else>
-                <Avatar style="background: #00a2ae" shape="square" icon="ios-person" size="large"/>
-              </template>
-            </div>
+
+            </ul>
+
           </Content>
           <Footer class="type-area">
             <i-input
@@ -90,7 +94,7 @@
               type="textarea"
               :rows="5"
               class="input-area"/>
-            <Button id="send" @click="sendMsg">发送</Button>
+            <Button id="send" type="success" :disabled="disabledSend" @click="sendMsg">发送</Button>
           </Footer>
         </Layout>
       </Layout>
@@ -103,27 +107,59 @@
   import {getAllUser} from './api';
 
   export default {
+    directives: {
+      scroll: {
+        // 指令的定义
+        update: function (el) {
+          setTimeout(() => {
+            el.scrollTop = el.scrollHeight
+          })
+        }
+      }
+    },
     components: {},
     asyncData({store}) {
     },
     data() {
       return {
         valueLer: '',
-        activeWin: false,
+        activeWin: {
+          userId: '0'
+        },
         members: [],
-        onMember: []
+        onlinePeople: [],
+        hotmessges: []
       }
     },
     computed: {
       ...mapState(['authUser']),
+      disabledSend() {
+        return !Boolean(this.valueLer.trim())
+      }
     },
+    watch: {
+      hotmessges() {
+
+      }
+  },
     beforeMount() {
-      console.log('beforeMount')
-      socket.on('freshMembers', (member) => {
-        console.log(member)
-        // this.onMember = member;
+      socket.on('freshMembers', (memberlist) => {
+        this.onlinePeople = memberlist;
       })
       socket.on('get message form all', (data) => {
+        for (var item of this.members) {
+          if (item.userId === data.userId) {
+            this.hotmessges.push({
+              ...item,
+              type: data.type,
+              message: data.message
+            })
+            if (this.hotmessges.length >= 200) {
+              this.hotmessges.shift();
+            }
+            break;
+          }
+        }
         console.log(data)
       });
     },
@@ -131,12 +167,9 @@
       getAllUser().then(res => {
         this.members = res.data
       })
-      socket.emit('online', this.authUser.userId, (list) => {
-        console.error(list)
+      socket.emit('online', this.authUser.userId, (memberlist) => {
+        this.onlinePeople = memberlist;
       });
-      // socket.emit('getAll', null, (data) => {
-      //   console.error(data)
-      // })
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
@@ -147,7 +180,22 @@
         this.activeWin = item;
       },
       sendMsg() {
-        socket.emit('dispach message', '哈哈')
+        let trimed = this.valueLer.replace(/[\r\n]$/g, '').trim();
+        const params = {
+          userId: this.authUser.userId,
+          message: trimed
+        }
+        socket.emit('dispach message', params, () => {
+          this.hotmessges.push({
+            ...this.authUser,
+            type: 'send',
+            message: trimed
+          })
+          if (this.hotmessges.length >= 200) {
+            this.hotmessges.shift();
+          }
+          this.valueLer = '';
+        })
       }
     }
   }
@@ -158,6 +206,7 @@
     .ivu-layout-sider {
       background-color: rgb(245, 245, 245);
     }
+    .content,
     textarea.ivu-input {
       border: none;
       resize: none;
@@ -182,129 +231,10 @@
   }
 </style>
 <style lang="scss" scoped>
+  @import "./index.scss";
   .flex {
     display: flex;
     justify-content: flex-start;
-  }
-
-  .mod-chat {
-    background: url("../../assets/images/chat_image.jpg");
-    background-size: cover;
-    width: 100%;
-    margin: -24px;
-    margin-right: -24px;
-    padding: 60px 20px;
-    flex: 1;
-    .chat-main-content {
-      min-width: 900px;
-      width: 60%;
-      margin: 0 auto;
-    }
-    .header {
-      border-top-left-radius: 6px;
-      border-top-right-radius: 6px;
-      height: 70px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #eee;
-      box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-      z-index: 1;
-      position: relative;
-      .me {
-        cursor: pointer;
-      }
-    }
-    .chat-model {
-      border-bottom-left-radius: 6px;
-      border-bottom-right-radius: 6px;
-      box-shadow: 5px 5px 15px 0 hsla(0, 0%, 84%, .15);
-      overflow: hidden;
-      min-height: 700px;
-      .type-area, .content, .asside {
-        background-color: #fff;
-      }
-      .content {
-        padding-top: 20px;
-        background-color: #fff;
-        overflow: auto;
-        max-height: 700px;
-        .word {
-          background-color: #fff;
-          border-radius: 4px;
-          border: 1px solid #dde2ea;
-          padding: 8px;
-        }
-        .right-area {
-          margin-left: 10px;
-        }
-        .left-area {
-          margin-right: 10px;
-        }
-        .recieve-msg {
-          margin: 10px 0 0 20px;
-        }
-        .post-msg {
-          justify-content: flex-end;
-          margin: 10px 20px 0 0px;
-          .word {
-            background-color: #b8d45c;
-          }
-        }
-      }
-      .asside {
-        &.left {
-          border-right: 1px solid #ededed;
-        }
-        &.right {
-          border-left: 1px solid #ededed;
-        }
-        .qun {
-          height: 75px;
-          cursor: pointer;
-          padding-left: 28px;
-          /*background-color: #fbfbfb;*/
-          padding-top: 16px;
-          &.slected {
-            background-color: #ebf7ff;
-          }
-        }
-        .member {
-          padding: 14px 30px;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          cursor: pointer;
-          .offline {
-            @include gray();
-          }
-          &.slected {
-            background-color: #ebf7ff;
-            @include gray-no();
-          }
-          &.hover {
-            &:hover {
-              background-color: rgba(235, 247, 255, 0.46);
-            }
-          }
-        }
-
-      }
-      .type-area {
-        border-top: 1px solid #ededed;
-        min-height: 120px;
-        padding: 0;
-        padding-bottom: 10px;
-        .input-area {
-          height: 100%;
-        }
-        #send {
-          float: right;
-          margin-right: 10px;
-          padding: 10px 25px;
-        }
-      }
-    }
   }
 
 </style>
