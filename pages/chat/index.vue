@@ -29,7 +29,7 @@
               v-for="(item, index) in members"
               v-if="item.userId !== authUser.userId"
               :key="index">
-              <Badge :count="100">
+              <Badge :count="item.count">
                 <template v-if="item.avatar">
                   <Avatar
                     :class="{offline: onlinePeople.indexOf(item.userId) === -1}"
@@ -115,7 +115,7 @@
     created() {
       if (process.client) {
         getAllUser().then(res => {
-          this.members = res.data;
+          this.members = res.data.map(item => ({...item, count: 0}));
           const ids = res.data.map(item => ({userId: item.userId}))
           this.chatBord = this.chatBord.concat(ids);
           this.chatBord.forEach(item => {
@@ -147,11 +147,15 @@
             if (this.hotmessges[key].length >= 200) {
               this.hotmessges[key].shift();
             }
-            break;
+
+            if (this.activeWin.userId !== item.userId) {
+              item.count += 1;
+            }
           }
+          break;
         }
-        console.log(this.hotmessges)
       }
+
       socket.on('get message form all', (data) => {
         dataRecieve('0', data)
       });
@@ -169,6 +173,7 @@
     },
     methods: {
       openTab(item) {
+        item.count = 0;
         this.activeWin = item;
       },
       sendMsg() {
