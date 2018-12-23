@@ -14,8 +14,7 @@ export default function () {
   });
 
   socket.on('kickout', function(){
-    console.log('%c client kickout！','color:red');
-    console.log(Vue.prototype)
+    console.log('%c 被迫下线！','color:red');
     Vue.prototype.$Notice.info({
       title: '下线',
       desc: '账号在其他地点登录，请重新登录',

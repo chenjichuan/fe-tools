@@ -11,8 +11,7 @@ const error = chalk.bold.red;
 try {
   global.socket.removeAllListeners();
   global.io.sockets.removeAllListeners();
-} catch (e) {
-}
+} catch (e) {}
 
 // 全局Io
 global.io = io;
