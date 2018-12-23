@@ -1,0 +1,67 @@
+import { getProject } from './api';
+export default [{
+  width: '250px',
+  label: '项目名称',
+  key: 'project_id',
+  require: true,
+  children: [],
+  type: 'select',
+  render: () => {
+    return getProject()
+  }
+}, {
+  label: '需求名称',
+  key: 'order',
+  require: true,
+  type: 'text',
+}, {
+  label: '需求jira',
+  key: 'wiki_url',
+  require: true,
+  type: 'text',
+}, {
+  label: '开发周期',
+  key: 'date_range',
+  type: 'datetimerange',
+}, {
+  label: '联调周期',
+  key: 'simulation_range',
+  type: 'datetimerange',
+}, {
+  label: '上线日期',
+  key: 'product_time',
+  type: 'datepicker',
+}, {
+  label: 'FE',
+  group: '1',
+  width: '250px',
+  key: 'fe_name',
+  children: [],
+  type: 'autoComplete',
+}, {
+  width: '250px',
+  label: 'RD',
+  key: 'rd_name',
+  children: [],
+  group: '2',
+  type: 'autoComplete',
+}, {
+  width: '250px',
+  label: 'PM',
+  group: '3',
+  key: 'pm_name',
+  children: [],
+  type: 'autoComplete',
+}, {
+  width: '250px',
+  label: 'QA',
+  group: '4',
+  key: 'qa_name',
+  children: [],
+  type: 'autoComplete',
+}, {
+  label: '其他说明',
+  placeholder: '项目是否延期，原因，需求改动，等等',
+  key: 'description',
+  type: 'textarea',
+}]

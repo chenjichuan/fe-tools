@@ -49,6 +49,15 @@
           @on-change="(data) => {onChange(data, item.key)}"
           style="width: 200px"/>
 
+        <DatePicker
+          v-else-if="item.type === 'datepicker'"
+          v-model="formParams[item.key]"
+          type="date"
+          show-week-numbers
+          placement="bottom-end"
+          placeholder="上线日期"
+          @on-change="(data) => {onChange(data, item.key)}"
+          style="width: 200px" />
       </FormItem>
     </Form>
     <div slot="footer">

@@ -8,6 +8,7 @@ function weekly(sequelize) {
     wiki_url: Sequelize.STRING,
     project_id: Sequelize.INTEGER,
     project_name: Sequelize.STRING,
+    product_time: Sequelize.STRING,
     date_range: Sequelize.JSON,
     simulation_range: Sequelize.JSON,
     owner: Sequelize.STRING,
