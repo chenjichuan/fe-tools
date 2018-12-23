@@ -42,7 +42,7 @@
   import Fullscreen from '@/components/header-bar/fullscreen'
   import SiderBar from '@/components/sider-bar'
   import {mapState, mapMutations, mapActions} from 'vuex'
-
+  import websockets from'../plugins/socket.io'
   export default {
     components: {HeaderBar, User, Fullscreen, SiderBar},
     head () {
@@ -95,6 +95,7 @@
     created() {
       // layout 全部函数只渲染1次，asyncData 不执行
       if (process.client) {
+        websockets()
       }
     },
     async mounted() {
