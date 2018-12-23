@@ -78,7 +78,7 @@
                 </div>
                 <div style="display: inline-block">
                   <div class="text" style="position: relative">
-                    <p style="padding-right: 30px">联调周期</p>
+                    <p>联调周期</p>
                     <a
                       v-show="false"
                       style="position: absolute;right: 0;top: 0;"
@@ -262,15 +262,13 @@
         })
       },
       todo(data) {
-        const [start, end] = data.date_range;
-        const [s_start, s_end] = data.simulation_range;
         data.date_range = data.date_range.map(item => {
           return item ? moment(item).format('YYYY-MM-DD') : ''
         });
         data.simulation_range = data.simulation_range.map(item => {
           return item ? moment(item).format('YYYY-MM-DD') : ''
         })
-        data.product_time = moment(data.product_time).format('YYYY-MM-DD')
+        data.product_time = data.product_time ?  moment(data.product_time).format('YYYY-MM-DD') : ''
         if (this.switch === 'add') {
           addWeekly(data).then(() => {
             this.showMsg(['success', '成功', '添加成功']);
