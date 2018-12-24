@@ -32,12 +32,6 @@
     "icon": "ios-qr-scanner"
   },
   {
-    "path": "/poster",
-    "name": "poster",
-    "valueText": "postman",
-    "icon": "ios-send"
-  },
-  {
     "path": "/chat",
     "name": "chat",
     "valueText": "即时会话",
