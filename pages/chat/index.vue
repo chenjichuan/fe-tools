@@ -60,7 +60,7 @@
           </ul>
         </Sider>
         <Layout>
-          <Content class="content" v-scroll>
+          <Content id="window-chat" class="content" v-scroll>
             <transition name="fade">
               <ChatBox
                 v-if="mem.userId === activeWin.userId"
@@ -142,6 +142,7 @@
       socket.on('freshMembers', (memberlist) => {
         this.onlinePeople = memberlist;
       })
+
       const dataRecieve = (key, data, type) => {
         // 找到是谁发的
         this.members.forEach(item => {
@@ -165,12 +166,16 @@
             }
           }
         })
+        setTimeout(() => {
+          const el = document.getElementById('window-chat');
+          el.scrollTop = el.scrollHeight
+        })
       }
-
 
       socket.on('get message form all', (data) => {
         dataRecieve('0', data, 'all')
       });
+
       socket.on('get secret message', (data) => {
         data.userId = data.from;
         dataRecieve(data.from, data)
