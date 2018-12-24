@@ -77,6 +77,11 @@
                   </p>
                 </div>
                 <div style="display: inline-block">
+                  <div class="text">
+                    <p>开发周期</p>
+                    <p v-if="item.date_range[0]">{{ item.date_range[0] }}&nbsp;&nbsp;{{ item.date_range[1] }}</p>
+                    <p v-else>未填写</p>
+                  </div>
                   <div class="text" style="position: relative">
                     <p>联调周期</p>
                     <a
@@ -88,11 +93,6 @@
                     <p v-if="item.simulation_range[0]">{{ item.simulation_range[0] }}&nbsp;&nbsp;{{
                       item.simulation_range[1]
                       }}</p>
-                    <p v-else>未填写</p>
-                  </div>
-                  <div class="text">
-                    <p>开发周期</p>
-                    <p v-if="item.date_range[0]">{{ item.date_range[0] }}&nbsp;&nbsp;{{ item.date_range[1] }}</p>
                     <p v-else>未填写</p>
                   </div>
                   <div class="text">
