@@ -64,7 +64,7 @@
                   </div>
                   <div class="left-icon">
                     <h3>{{ item.project_name }}</h3>
-                    <p>{{ item.description || '没有说明' }}</p>
+                    <p>{{ item.order || '尚未填写' }}</p>
                   </div>
                 </div>
               </i-col>
