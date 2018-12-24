@@ -75,7 +75,10 @@
               v-model="valueLer"
               type="textarea"
               :rows="5"
-              class="input-area"/>
+              class="input-area"
+              @on-keydown="keydown"
+              @on-keyup="keyup"
+              @on-enter="sendMsg"/>
             <Button id="send" type="success" :disabled="disabledSend" @click="sendMsg">发送</Button>
           </Footer>
         </Layout>
@@ -193,7 +196,44 @@
         item.count = 0;
         this.activeWin = item;
       },
+      keyup(e) {
+        var code = e.keyCode;
+        if (code === 91 || code === 229) {
+          this.CtrlCommand = false
+        }
+      },
+      keydown(e) {
+        var code = '';
+        if (!e) {
+          var e = window.event;
+        }
+        if (e.keyCode) {
+          code = e.keyCode;
+        } else if (e.which) {
+          code = e.which;
+        }
+        if (code === 13) {
+          // 阻止原生的回车
+          e.preventDefault();
+        }
+        // console.log(code, this.CtrlCommand)
+        if (code === 13) {
+          e.returnValue = false;
+        }
+        if (this.CtrlCommand && code === 13) { // 换行
+          this.valueLer += '\n'
+        }
+        // console.log(code)
+        if (code === 91 || code === 229) { // command
+          this.CtrlCommand = true
+        }
+        setTimeout(() => {
+          const el = document.querySelector('.input-area > textarea');
+          el.scrollTop = el.scrollHeight
+        })
+      },
       sendMsg() {
+        if (this.disabledSend) return
         const dataDeal = (key, params) => {
           if (!this.hotmessges[key]) {
             this.hotmessges[key] = [];
@@ -241,12 +281,14 @@
   .mod-chat-glb {
     background-color: #fff;
   }
+
   .fade-enter-active, .fade-leave-active {
     transition: opacity .2s;
     opacity: 0.5;
     z-index: -1;
     position: relative;
   }
+
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
