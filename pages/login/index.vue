@@ -57,7 +57,7 @@ export default {
     ]),
     handleSubmit ({ username, password }) {
       this.login({ username, password }).then(() => {
-        this.$router.push('home')
+        location.href = '/home'
         this.$Message.success('登录成功');
       }, (res) => {
         this.$Message.error(res.error);

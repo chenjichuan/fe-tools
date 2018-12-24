@@ -44,6 +44,7 @@
   import {mapState, mapMutations, mapActions} from 'vuex'
   import websockets from'../plugins/socket.io'
   export default {
+    middleware: 'authenticated',
     components: {HeaderBar, User, Fullscreen, SiderBar},
     head () {
       return {
