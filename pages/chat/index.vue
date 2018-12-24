@@ -72,6 +72,7 @@
           </Content>
           <Footer class="type-area">
             <i-input
+              element-id="valueLer"
               v-model="valueLer"
               type="textarea"
               :rows="5"
@@ -186,6 +187,7 @@
     },
     mounted() {
       this.modal = true;
+      document.getElementById('valueLer').focus();
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
