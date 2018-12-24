@@ -58,7 +58,11 @@
     background-color: #fff;
     border-radius: 4px;
     border: 1px solid #dde2ea;
-    padding: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    white-space: pre-wrap;
+    max-width: 300px;
+    word-break: break-all;
   }
   .right-area {
     margin-left: 10px;
