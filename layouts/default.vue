@@ -1,8 +1,8 @@
 <template>
   <div class="layout main" id="default-layout">
     <Layout style="height: 100%;display: flex;">
-      <Sider ref="side1" collapsible collapsed-width="100"
-             width="230px"
+      <Sider ref="side1" collapsible collapsed-width="80"
+             width="200px"
              style="height: 100%;"
              :style="{'overflow': isCollapsed ? '': 'hidden'}"
              class="ivu-menu-dark"

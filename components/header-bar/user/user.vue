@@ -5,6 +5,7 @@
         <Avatar :src="userAvator" size="large" v-if="userAvator"/>
         <Avatar icon="ios-person" size="large" v-else />
       </Badge>
+      <span class="name">{{ authUser.nickname || authUser.username }}</span>
       <Icon :size="18" type="md-arrow-dropdown"/>
       <DropdownMenu slot="list">
         <DropdownItem name="setting">个人设置</DropdownItem>
@@ -16,7 +17,7 @@
 
 <script>
   import './user.less'
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     name: 'User',
@@ -25,6 +26,9 @@
         type: String,
         default: ''
       }
+    },
+    computed: {
+      ...mapState(['authUser'])
     },
     methods: {
       ...mapActions([
@@ -55,3 +59,11 @@
     }
   }
 </script>
+<style scoped lang="scss">
+  .name {
+    color: rgba(0,0,0,.65);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 5px;
+  }
+</style>
