@@ -216,7 +216,6 @@
           // 阻止原生的回车
           e.preventDefault();
         }
-        // console.log(code, this.CtrlCommand)
         if (code === 13) {
           e.returnValue = false;
         }
