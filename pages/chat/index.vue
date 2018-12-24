@@ -75,6 +75,7 @@
               v-model="valueLer"
               type="textarea"
               :rows="5"
+              :maxlength="1000"
               :autofocus="true"
               class="input-area"
               @on-keydown="keydown"/>
