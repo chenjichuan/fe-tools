@@ -3,7 +3,7 @@
 > 一个轻量级全栈项目
 
 <p align="center">
-  <a href="http://ant.design">
+  <a href="http://47.99.215.225/login">
     <img style="border-radius='4px'" width="200" src="http://47.99.215.225/logo-min.jpg">
   </a>
 </p>
