@@ -212,4 +212,21 @@ const mysqlInit = (Sequelize) => {
 #### compression.js 
 后端用node的好处是随意，compression的使用对于返回给前端的js文件来说，压缩量是非常巨大的，纯粹的前端优化方案于此相比可能是小巫见大巫，感兴趣亲自测试一下。
  
+ 
+ 
+#### 关于阿里云
+
+项目部署的时候一定记着在阿里云控制台防火墙把相关的端口放开.云上安装好需要的工具之后就可以上线了。推荐简单的Ubuntu系统,安装软件方便。
+
+
+``` bash
+
+git pull
+
+npm run build
+
+screen npm run start
+
+```
+
 ## 未完（待续）
