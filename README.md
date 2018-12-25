@@ -8,6 +8,7 @@
   </a>
 </p>
 
+
 # view in  [example](http://47.99.215.225)
 
 
@@ -94,7 +95,7 @@ $ npm run generate
 
 - 参考Ant design + iview 内容设计风格。iview主体UI框架。
 - 从零开始简单搭建前后端一体的轻量级项目
-- 记录日常工作，导出表格等。（内容后续开发中）
+- 本项目主要记录日常工作，导出表格等简单功能。以及一些技术的探索。（内容后续开发中）
 
 
 ### 前端部分
@@ -107,7 +108,8 @@ $ npm run generate
 ### 后端部分
 
 - node + express 
-- 数据存储 最新版 [mysql v8.0.13](https://dev.mysql.com/downloads/mysql/)
+- 数据存储 最新版 [mysql 8.0.13](https://dev.mysql.com/downloads/mysql/)
+- node数据库连接工具 [Sequelize.js](https://www.npmjs.com/package/sequelize)
 - 缓存策略 [express-session](https://www.npmjs.com/package/express-session) +
 [express-mysql-session](https://www.npmjs.com/package/express-mysql-session)；
 可能Redis是最佳且常用方案。因为mysql-session的方式也不影响我开发（轻量级），所以没有关注到
@@ -124,3 +126,67 @@ Redis.
 
 假设以上都已经准备就绪，数据库建库脚本在databaseScipt文件夹中，全部执行完毕，就可以做后端开发了。
 
+#### 先简单介绍一下数据库连接
+
+```
+/***
+ *
+ * 数据库文件配置 config.js
+ * 本地环境跟线上环境区分
+ * ****/
+let isEnv = !(process.env.NODE_ENV === 'production')
+
+let config = ''
+if (isEnv) {
+  config = {
+    database: 'feTools',
+    user: 'web',
+    username: 'web',
+    password: 'admin123',
+    host: '127.0.0.1',
+    port: 3306
+  }
+} else {
+  config = {
+    database: 'feTools',
+    user: 'web',
+    username: 'web',
+    password: 'admin123',
+    host: '127.0.0.1',
+    port: 3306
+  }
+}
+
+module.exports = {
+  config
+}
+// 异步连接数据库，成功以后返回实例。使用数据库总的表就用到这个实例。
+const mysqlInit = (Sequelize) => {
+  var sequelize = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: 'mysql',
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 30000
+    },
+    timestamps: false
+    //最好关掉timestamps , 框架自动帮你添加时间到UpdatedAt上边
+  });
+  return new Promise((resolve, reject) => {
+    // 验证链接
+    sequelize
+      .authenticate()
+      .then(() => {
+        resolve(sequelize)
+        consola.ready({
+          message: 'Connection has been established successfully.',
+          badge: true
+        })
+      })
+      .catch(err => {
+        reject(err)
+      });
+  })
+}
+```
