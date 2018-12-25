@@ -23,7 +23,6 @@
         <Header :style="{padding: 0}" class="layout-header-bar header-con">
           <header-bar :is-collapsed="isCollapsed" @doCollapsed="isCollapsed = !isCollapsed">
             <user :user-avator="userAvator"/>
-            <fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>
           </header-bar>
         </Header>
         <Content class="main-content">
@@ -39,13 +38,12 @@
   import maxLogo from '@/assets/images/logo.png'
   import HeaderBar from '@/components/header-bar'
   import User from '@/components/header-bar/user'
-  import Fullscreen from '@/components/header-bar/fullscreen'
   import SiderBar from '@/components/sider-bar'
   import {mapState, mapMutations, mapActions} from 'vuex'
   import websockets from'../plugins/socket.io'
   export default {
     middleware: 'authenticated',
-    components: {HeaderBar, User, Fullscreen, SiderBar},
+    components: {HeaderBar, User, SiderBar},
     head () {
       return {
         title: this.title
