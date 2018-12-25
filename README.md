@@ -16,20 +16,16 @@
 
 ``` bash
 # install dependencies
-$ yarn install
-$ or
 $ npm install
 
-# serve with hot reload at localhost:3000
-$ yarn run dev
-$ or
+# develop
 $ npm run dev
 
 # build for production and launch server
 $ npm run build
 $ npm start
 
-# generate static project
+# generate static project 静态部署
 $ npm run generate
 ```
     
