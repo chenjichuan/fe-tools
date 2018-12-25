@@ -72,13 +72,14 @@
           </Content>
           <Footer class="type-area">
             <i-input
+              element-id="valueLer"
               v-model="valueLer"
               type="textarea"
               :rows="5"
+              :maxlength="1000"
+              :autofocus="true"
               class="input-area"
-              @on-keydown="keydown"
-              @on-keyup="keyup"
-              @on-enter="sendMsg"/>
+              @on-keydown="keydown"/>
             <Button id="send" type="success" :disabled="disabledSend" @click="sendMsg">发送</Button>
           </Footer>
         </Layout>
@@ -186,6 +187,7 @@
     },
     mounted() {
       this.modal = true;
+      document.getElementById('valueLer').focus();
     },
     beforeDestroy() {
       socket.emit('offline', this.authUser.userId)
@@ -196,35 +198,20 @@
         item.count = 0;
         this.activeWin = item;
       },
-      keyup(e) {
-        var code = e.keyCode;
-        if (code === 91 || code === 229) {
-          this.CtrlCommand = false
-        }
-      },
+
       keydown(e) {
-        var code = '';
-        if (!e) {
-          var e = window.event;
-        }
-        if (e.keyCode) {
-          code = e.keyCode;
-        } else if (e.which) {
-          code = e.which;
-        }
+        var code = e.keyCode;
         if (code === 13) {
           // 阻止原生的回车
           e.preventDefault();
-        }
-        if (code === 13) {
           e.returnValue = false;
         }
-        if (this.CtrlCommand && code === 13) { // 换行
+        if (e.altKey && code == 13) {
           this.valueLer += '\n'
-        }
-        // console.log(code)
-        if (code === 91 || code === 229) { // command
-          this.CtrlCommand = true
+        } else if (e.ctrlKey && code == 13) {
+          this.valueLer += '\n'
+        } else if (code === 13) {
+          this.sendMsg()
         }
         setTimeout(() => {
           const el = document.querySelector('.input-area > textarea');

@@ -38,6 +38,12 @@
     "icon": "ios-chatbubbles"
   },
   {
+    "path": "/board",
+    "name": "board",
+    "valueText": "留言板",
+    "icon": "md-bonfire"
+  },
+  {
     "group": "100",
     "name": "person",
     "valueText": "个人",
@@ -50,11 +56,5 @@
         "icon": "ios-settings"
       }
     ]
-  },
-  {
-    "path": "/board",
-    "name": "board",
-    "valueText": "留言板",
-    "icon": "md-bonfire"
   }
 ]
