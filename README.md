@@ -96,7 +96,8 @@ $ npm run generate
 - 参考Ant design + iview 内容设计风格。iview主体UI框架。
 - 从零开始简单搭建前后端一体的轻量级项目
 - 本项目主要记录日常工作，导出表格等简单功能。以及一些技术的探索。（内容后续开发中）
-
+- 异地登录限制，同一时间只能同一个浏览器一个账号。
+- 异地登录及时反馈，因为加入 websocket 当挤掉线发生后，客户端及时能收到消息。
 
 ### 前端部分
 
@@ -190,3 +191,29 @@ const mysqlInit = (Sequelize) => {
   })
 }
 ```
+
+#### 关于 websocket
+
+ 可能是被很多人忽略却又有着很大开发潜力的功能，全双工，可以实现后端推送亦或是前端推送，及时有效。
+ 
+#### 关于 formidable 文件上传注意以下一点即可，其他操作都在官网可查
+
+```
+ app.post('/api/uploadImg', (req, res) => {
+    var form = new formidable.IncomingForm(); // 每用一次需要new一个formidable对象
+    form.encoding = 'utf-8';
+    form.uploadDir = __dirname + '/../../../files_upload/icons';
+    form.keepExtensions = true; // 包含原始属性的扩展名
+    form.type = 'multipart';
+    form.maxFileSize = 2 * 1024 * 1024; //限制上传文件的大小 10M
+    form.hash = true;
+    
+    .....
+    .....
+    .........
+```
+ 
+#### compression.js 
+后端用node的好处是随意，compression的使用对于返回给前端的js文件来说，压缩量是非常巨大的，纯粹的前端优化方案于此相比可能是小巫见大巫，感兴趣亲自测试一下。
+ 
+## 未完（待续）
