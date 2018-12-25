@@ -102,7 +102,7 @@ $ npm run generate
 ### 前端部分
 
 - 搭建项目，参考 [nuxt.js](https://zh.nuxtjs.org/)  node + express 服务器部分 
-- 为了更加了解Nuxt特性，加入了 Less 和 Sass 项目中可以自由选择
+- 为了体现任性，加入了 Less 和 Sass 项目中可以自由选择
 - 引入了WebSocket，开发了一个简单的即时消息推送功能。由于介意兼容性问题，采用socket.io。参考 [socket.io](https://socket.io/)
 - 接口交互，使用了fetch [whatwg-fetch](https://www.npmjs.com/package/whatwg-fetch)以及[nuxt.js推荐的fetch方法](https://zh.nuxtjs.org/api/pages-fetch/#fetch-%E6%96%B9%E6%B3%95)  
 
