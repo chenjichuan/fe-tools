@@ -17,7 +17,6 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-
   /*
   ** Customize the progress-bar color
   */
@@ -31,11 +30,7 @@ module.exports = {
   */
   css: [
     // 直接加载一个 Node.js 模块。（在这里它是一个 Sass 文件）
-    // 'bulma'
-    // 项目里要用的 CSS 文件
-    // '@/assets/css/main.css',
     // 项目里要使用的 SCSS 文件
-    // '@/assets/css/main.scss'
     '@/assets/css/normalize.css',
     '@/assets/css/global.less'
   ],
@@ -54,7 +49,6 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     ['@nuxtjs/style-resources', { anotherOption: true }]
   ],

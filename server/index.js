@@ -1,4 +1,5 @@
 const express = require('express')
+const compression = require('compression') // gzip 压缩
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
 const consola = require('consola') // 美化打印模块
@@ -17,6 +18,9 @@ const imgUpload = require('./controller/uploadAction')
 
 const app = express()
 const host = process.env.HOST || '0.0.0.0';
+
+//使用compression
+app.use(compression());
 
 // websocket
 require('./websocket');
@@ -40,7 +44,7 @@ app.use(bodyParser.json());
 // 映射图片目录
 app.use(express.static(__dirname + '../../files_upload/icons'));
 
-// session 设置
+// session 设置 Sessions 来创建 req.session
 var sess = {
   secret: 'super-secret-key',
   resave: false,
@@ -48,7 +52,6 @@ var sess = {
   store: sessionStore,
   cookie: {maxAge: 60000 * 60 * 2} // 120分钟
 }
-// Sessions 来创建 req.session
 app.use(session(sess))
 
 if (!config.dev) {
@@ -78,8 +81,7 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
-  /** ******监听************ **/
-  // Listen the server
+  /** ******监听server************ **/
   app.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
