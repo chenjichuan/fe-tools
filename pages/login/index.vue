@@ -3,9 +3,15 @@
 </style>
 
 <template>
-  <div class="login" :class="{'img-done': !loading}">
+  <div class="main-box">
+    <div class="login" :class="{'img-done': !loading}" />
+    <div class="diy-logo" v-if="!loading">
+      <span class="my-logo">
+        <img src="../../assets/images/my-logo.png" alt="">
+      </span>
+      <span class="white-bg" />
+    </div>
     <Loading v-if="loading" />
-    <!--<canvas id="c" width="2560" height="404" />-->
     <transition name="fade">
       <div v-if="!loading" class="login-con">
         <Card
@@ -26,7 +32,6 @@
 import Loading from '@/components/Loading'
 import LoginForm from '@/components/login-form'
 import LoginBg from '@/assets/images/login-bg.jpg';
-// import bgGo from './bg'
 import { mapActions } from 'vuex'
 export default {
   layout: 'blank',
