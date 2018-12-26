@@ -57,13 +57,7 @@
       bg.onload = () => {
         this.loading = false;
       }
-      setTimeout(() => {
-        // this.loading = false;
-        // bgGo(window)
-        bg.src = LoginBg
-
-      }, 1000);
-
+      bg.src = LoginBg
     },
     methods: {
       ...mapActions([
