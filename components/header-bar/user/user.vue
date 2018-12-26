@@ -1,6 +1,6 @@
 <template>
   <div class="user-avator-dropdown">
-    <Dropdown @on-click="handleClick">
+    <Dropdown @on-click="handleClick" v-if="authUser.username">
       <Badge>
         <Avatar :src="userAvator" size="large" v-if="userAvator"/>
         <Avatar icon="ios-person" size="large" v-else />

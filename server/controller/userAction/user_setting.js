@@ -17,6 +17,9 @@ function success(req, res, [sqlRes]) {
   return res.json({code: 0, data})
 }
 const getGroupCallback = async function (req, res) {
+  if(!req.session || !req.session.authUser) {
+    return res.json({code: 0, data: []})
+  }
   // 组别数据查询实例
   const groupSql = new GroupSql(global.INSTANCE);
   const {authUser: {group}} = req.session
@@ -58,12 +61,7 @@ const updateUserInfoCallback =  async function (req, res) {
       req.session.authUser.avatar = req.body.avatar
       req.session.authUser.group = req.body.group
       req.session.authUser.nickname = req.body.nickname;
-
       req.session.touch();
-      // req.session.save(function(err) {
-      //   console.log(err)
-      // })
-      // sessionStore.set(req.sessionID, JSON.parse(JSON.stringify(req.body)), () => {});
 
       if(req.body.avatar) {
         iconSql.find({userId}).then((icon_logs) => {

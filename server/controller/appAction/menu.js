@@ -1,10 +1,10 @@
 const fs = require('fs')
-// fs.readFile('../static/menu.js', 'utf8', function(err, data){
-//   console.log(data);
-// });
 const menu = (app) => {
   /** ******获取menu****** **/
   app.get('/api/getMenuList', function (req, res) {
+    if(!req.session || !req.session.authUser) {
+      return res.json({code: -2, message: '登录过期'})
+    }
     const { authUser = {} } = req.session || {};
     const { group } = authUser;
     fs.readFile('server/static/menu.json', 'utf8', function (err, data) {
