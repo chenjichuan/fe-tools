@@ -1,3 +1,6 @@
+var fs = require('fs');
+var path = require('path')
+var join = path.join;
 const object =  {
   sessionCheck(req, Store) {
     const { authUser } = req.session;
@@ -55,4 +58,29 @@ const object =  {
   }
 
 }
+
+object.getJsonFiles = function (jsonPath) {
+  let jsonFiles = [];
+
+  function findJsonFile(pather) {
+    let files = fs.readdirSync(pather);
+    files.forEach(function (item) {
+      let fPath = join(pather, item);
+      let stat = fs.statSync(fPath);
+      if (stat.isDirectory() === true) {
+        findJsonFile(fPath);
+      }
+      if (stat.isFile() === true) {
+        jsonFiles.push(path.basename(fPath));
+      }
+    });
+  }
+  try {
+    findJsonFile(jsonPath);
+  } catch (e) {}
+  return jsonFiles
+}
+
+
+
 module.exports = object

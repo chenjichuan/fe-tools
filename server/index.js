@@ -1,9 +1,11 @@
 const express = require('express')
+const fs = require("fs");
+const path = require("path");
 const compression = require('compression') // gzip 压缩
 const bodyParser = require('body-parser') // body解析
 const session = require('express-session') // session
 const consola = require('consola') // 美化打印模块
-const { sessionStore } = require('./session');
+const {sessionStore} = require('./session');
 
 const {Nuxt, Builder} = require('nuxt')
 const Sequelize = require('sequelize');
@@ -42,7 +44,9 @@ app.set('port', port) // 端口设置
 app.use(bodyParser.json());
 
 // 映射图片目录
-app.use(express.static(__dirname + '../../files_upload/icons'));
+app.use(express.static(__dirname + '/../files_upload/icons'));
+
+app.use('/sw', express.static(__dirname + '/sw'));
 
 // session 设置 Sessions 来创建 req.session
 var sess = {
@@ -66,6 +70,24 @@ async function userActions() {
 async function appActions() {
   imgUpload(app, global.INSTANCE)
   apprAction(app);
+}
+
+async function serviceWorker() {
+  let filenames = require('./lib').getJsonFiles(__dirname + '/../.nuxt/dist/client');
+  filenames = filenames.map(item => {
+    if(/png|jpg|svg/.test(item)) {
+      return `'/_nuxt/img/${item}'`
+    } else if(/woff|ttf/.test(item)) {
+      return `'/_nuxt/fonts/${item}'`
+    } else {
+      return `'/_nuxt/${item}'`
+    }
+  });
+  const tarString = "var cacheList = ['/home', '/login', '/index'," + filenames.toString() + '];';
+  var source = fs.readFileSync(path.join(__dirname, "/sw/swbk.js"));
+  var target = path.join(__dirname, "/sw/sw.js");
+  fs.writeFileSync(target, tarString)
+  fs.appendFileSync(target, source);
 }
 
 async function start() {
@@ -97,6 +119,10 @@ async function todo() {
   await userActions()
   // 业务处理
   await appActions()
+  // 处理service worker
+  if (!config.dev) {
+    await serviceWorker()
+  }
   // 渲染页面
   await start()
 }

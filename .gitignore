@@ -83,4 +83,4 @@ dist
 # server upload dir
 files_upload
 
-server/sw
+server/sw/sw.js
