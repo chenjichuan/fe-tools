@@ -19,7 +19,7 @@
         </Header>
       </div>
       <Layout class="chat-model">
-        <Sider hide-trigger class="asside left">
+        <Sider hide-trigger class="asside left" style="overflow-y: auto">
           <div
             @click="activeWin = {userId: '0'}"
             class="qun noselect hover"
