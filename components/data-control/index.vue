@@ -149,15 +149,11 @@
         this.formParams[key] = data;
       },
       handleFocus(item) {
-        if(item.children.length) return;
         getMembers({role: item.key.split('_')[0]}).then(res => {
           item.children = res.data
         })
       },
       handleSearch(item) {
-        // getMembers({role: item.key.split('_')[0]}).then(res => {
-        //   item.children = res.data
-        // })
       },
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
