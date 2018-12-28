@@ -115,6 +115,24 @@ Redis.
 - 同样采用 [socket.io](https://socket.io/) 与前端对接。
 - 打包 [compression](https://www.npmjs.com/package/compression) 可以压缩除了图片以外的文件高达70%的体积。大大节省了流量的开销，缩短了页面渲染时间。
 
+关于session 和 cookie 
+可以简单的理解为服务器通过http请求在客户端放置的一小段代码，cookie通过携带唯一的id 跟服务端的 唯一sessionId对比，一致则正确执行会话，
+不一致则强制登出，或者其他措施。
+
+``` javascript
+
+var http = require('http');
+var fs = require('fs');
+ 
+http.createServer(function(req, res) {
+    res.setHeader('status', '200 OK');
+    res.setHeader('Set-Cookie', 'isVisit=true;domain=.yourdomain.com;path=/;max-age=1000');
+    res.write('Hello World');
+    res.end();
+
+```
+
+
 
 ## 项目搭建
 
