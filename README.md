@@ -147,7 +147,7 @@ nuxt 在这基础之上做了封装，提供很强大的功能。需要优先了
 
 #### 先简单介绍一下数据库连接
 
-```
+``` javascript
 /***
  *
  * 数据库文件配置 config.js
@@ -216,7 +216,7 @@ const mysqlInit = (Sequelize) => {
  
 #### 关于 formidable 文件上传注意以下一点即可，其他操作都在官网可查
 
-```
+``` javascript
  app.post('/api/uploadImg', (req, res) => {
     var form = new formidable.IncomingForm(); // 每用一次需要new一个formidable对象
     form.encoding = 'utf-8';
