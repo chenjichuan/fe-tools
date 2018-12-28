@@ -1,0 +1,69 @@
+.rotateIn {
+  opacity: 0;
+  animation: rotateIn 1s;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes rotateIn {
+  from {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, -200deg);
+    transform: rotate3d(0, 0, 1, -200deg);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate3d(0, 0, 1, -200deg);
+    transform: rotate3d(0, 0, 1, -200deg);
+    opacity: 0;
+  }
+
+  to {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+.mod-home {
+  width: 100%;
+  position: relative;
+  height: 85vh;
+  overflow: auto;
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    .copyright {
+      color: rgba(0,0,0,.45);
+      font-size: 14px;
+    }
+    .github {
+      font-size: 30px;
+      margin-bottom: 8px;
+      display: block;
+      color: rgba(0,0,0,.45);
+      transition: all .3s;
+    }
+    .trans {
+      display: inline-block;
+      transform: rotate(180deg);
+    }
+  }
+}
