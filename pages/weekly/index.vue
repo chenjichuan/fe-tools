@@ -51,7 +51,7 @@
             <Row type="flex" justify="space-between" align="middle">
               <i-col span="10">
                 <div class="flex">
-                  <div>
+                  <div style="text-align: center">
                     <Avatar
                       size="large"
                       :src="img"/>
@@ -59,7 +59,10 @@
                       <a
                         :href="item.wiki_url"
                         target="_blank"
-                        v-if="item.wiki_url">Jira</a>
+                        v-if="item.wiki_url">
+                        <p>Jira</p>
+                        <p>CTOB-{{ item.wiki_url.split('CTOB-').reverse()[0] }}</p>
+                      </a>
                     </div>
                   </div>
                   <div class="left-icon">
