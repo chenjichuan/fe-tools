@@ -36,9 +36,8 @@ export const exportData = (title, data, ownerKey, exporter) => {
       }
     }
     item.description = item.description.replace(/\n/g, ' ')
+    item.order = item.order.replace(/,/g, '，')
   })
-  // delete data['projec_id'];
-  // delete data['projec_id'];
   exporter({
     filename: '周报',
     columns: columns,
