@@ -92,6 +92,20 @@ function MemberSql(sequelize) {
     });
     return members;
   };
+  this.findOrCreate = async function ({pm_name, qa_name, rd_name, fe_name}, defaults) {
+    const query_or = [
+      {name: pm_name},
+      {name: qa_name},
+      {name: rd_name},
+      {name: fe_name},
+    ]
+    Members.findOrCreate({
+      where: {
+        $or: query_or
+      },
+      defaults: defaults
+    })
+  }
 }
 
 // icon log
@@ -104,9 +118,10 @@ function IconLogSql(sequelize) {
     timestamps: true, // //去除createAt updateAt
   })
 }
+
 IconLogSql.prototype.find = async function ({userId}) {
   var icons = this.Icon.findAll({
-    where:{
+    where: {
       userId
     }
   });
