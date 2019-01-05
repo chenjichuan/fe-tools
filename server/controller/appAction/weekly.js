@@ -66,23 +66,25 @@ const getWeeklyCallback = async (req, res) => {
  *  新增周报
  * **/
 async function addMember(data) {
+  const warning = require('chalk').keyword('orange');
   const {pm_name = '', qa_name = '', rd_name = '', fe_name = ''} = data
   // 用户表
   const memberSql = new MemberSql(global.INSTANCE);
   // members 表中么有就添加
   const memberRes = await memberSql.find({pm_name, qa_name, rd_name, fe_name})
+  console.log(warning(memberRes));
   if(!memberRes.length) {
     if(pm_name) {
-      memberSql.create({role: 'pm', name: pm_name})
+      await memberSql.create({role: 'pm', name: pm_name})
     }
     if (qa_name) {
-      memberSql.create({role: 'qa', name: qa_name})
+      await memberSql.create({role: 'qa', name: qa_name})
     }
     if (rd_name) {
-      memberSql.create({role: 'rd', name: rd_name})
+      await memberSql.create({role: 'rd', name: rd_name})
     }
     if (fe_name) {
-      memberSql.create({role: 'fe', name: fe_name})
+      await memberSql.create({role: 'fe', name: fe_name})
     }
   }
 }
@@ -131,13 +133,13 @@ const editWeeklyCallback =  async function (req, res) {
     const data = await weeklyInstance.edit({ id }, params)
     if(data.length) {
       // members 表中么有就添加
-      addMember({pm_name, qa_name, rd_name, fe_name})
-      res.json({code: 0, data: req.body})
+      await addMember({pm_name, qa_name, rd_name, fe_name})
+      return res.json({code: 0, data: req.body})
     }
     else
-      res.json({code: -1, data})
+      return res.json({code: -1, data})
   }, () => {
-    res.json({code: -2, message: '登录过期'})
+    return res.json({code: -2, message: '登录过期'})
   })
 }
 
