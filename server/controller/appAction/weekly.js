@@ -65,10 +65,30 @@ const getWeeklyCallback = async (req, res) => {
 /***
  *  新增周报
  * **/
-
-const addWeeklyCallback = async function (req, res) {
+async function addMember(data) {
+  const {pm_name = '', qa_name = '', rd_name = '', fe_name = ''} = data
   // 用户表
   const memberSql = new MemberSql(global.INSTANCE);
+  // members 表中么有就添加
+  const memberRes = await memberSql.find({pm_name, qa_name, rd_name, fe_name})
+  if(!memberRes.length) {
+    if(pm_name) {
+      memberSql.create({role: 'pm', name: pm_name})
+    }
+    if (qa_name) {
+      memberSql.create({role: 'qa', name: qa_name})
+    }
+    if (rd_name) {
+      memberSql.create({role: 'rd', name: rd_name})
+    }
+    if (fe_name) {
+      memberSql.create({role: 'fe', name: fe_name})
+    }
+  }
+}
+
+const addWeeklyCallback = async function (req, res) {
+
   // 项目表
   const projectSql = new ProjectInstance(global.INSTANCE);
   // 周报模块实例
@@ -78,21 +98,7 @@ const addWeeklyCallback = async function (req, res) {
     const { authUser: { group, userId, nickname, username } } = req.session
     const { project_id, pm_name, qa_name, rd_name, fe_name } = req.body
     // members 表中么有就添加
-    const memberRes = await memberSql.find({pm_name, qa_name, rd_name, fe_name})
-    if(!memberRes.length) {
-      if(pm_name) {
-        memberSql.create({role: 'pm', name: pm_name})
-      }
-      if (qa_name) {
-        memberSql.create({role: 'qa', name: qa_name})
-      }
-      if (rd_name) {
-        memberSql.create({role: 'rd', name: rd_name})
-      }
-      if (fe_name) {
-        memberSql.create({role: 'fe', name: fe_name})
-      }
-    }
+    addMember({pm_name, qa_name, rd_name, fe_name})
 
     const [ proRes ] = await projectSql.find({id: project_id})
     weeklyInstance.create(req.body, { group, userId, owner: nickname || username, project_name: proRes.name })
@@ -116,15 +122,18 @@ const editWeeklyCallback =  async function (req, res) {
   const weeklyInstance = new WeeklyInstance(global.INSTANCE);
   // 未过期执行
   sessionCheck(req).then(async () => {
-    const { id, project_id } = req.body
+    const { id, project_id, pm_name, qa_name, rd_name, fe_name } = req.body
     const [ proRes ] = await projectSql.find({id: project_id})
     const params = {
       ...req.body,
       project_name: proRes.name
     }
     const data = await weeklyInstance.edit({ id }, params)
-    if(data.length)
+    if(data.length) {
+      // members 表中么有就添加
+      addMember({pm_name, qa_name, rd_name, fe_name})
       res.json({code: 0, data: req.body})
+    }
     else
       res.json({code: -1, data})
   }, () => {
