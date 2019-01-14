@@ -32,7 +32,6 @@ export default {
   created() {
   },
   mounted() {
-
   }
 }
 </script>

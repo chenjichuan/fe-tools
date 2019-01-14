@@ -140,6 +140,10 @@
         socket.emit('online', this.authUser.userId, (memberlist) => {
           this.onlinePeople = memberlist;
         });
+
+        window.onbeforeunload = () => {
+          socket.emit('offline', this.authUser.userId)
+        }
       }
     },
     beforeMount() {

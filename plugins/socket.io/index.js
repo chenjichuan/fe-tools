@@ -6,6 +6,7 @@ export default function () {
   var socket = io(isEnv ? 'http://localhost:8000' : 'http://47.99.215.225:8000');
   window.io = io;
   window.socket = socket;
+
   socket.on('connect', function(){
     console.log('%c client connected！','color:green');
   });
